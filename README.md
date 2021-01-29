@@ -1,2 +1,2 @@
 # War3Unreal
-Warcraft III In Unreal
+War3Unreal
