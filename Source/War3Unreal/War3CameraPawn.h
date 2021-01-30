@@ -15,6 +15,25 @@ public:
 	// Sets default values for this pawn's properties
 	AWar3CameraPawn();
 
+
+	// Components Variable
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="War3CameraPawn")
+	class USceneComponent* Scene = nullptr;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="War3CameraPawn")
+	class UStaticMeshComponent* Sphere = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="War3CameraPawn", meta=(AllowPrivateAccess = "true"))
+	class USpringArmComponent* SpringArm = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="War3CameraPawn", meta=(AllowPrivateAccess = "true"))
+	class UCameraComponent* Camera = nullptr;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="War3CameraPawn", meta=(AllowPrivateAccess = "true"))
+	class UFloatingPawnMovement* FloatingPawn;
+
+
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,4 +45,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
+	void MoveForward(float Value);
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
+	void MoveRight(float Value);
+
+
+
+
+	
 };
