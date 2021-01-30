@@ -44,14 +44,28 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	// Move
 	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
 	void MoveForward(float Value);
 	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
 	void MoveRight(float Value);
 
 
+	
+	// Zoom
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
+	void Zoom(float Value);
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
+    void ZoomReset();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Zoom")
+	float DefaultZoomValue = 1500.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Zoom")
+	float ZoomMinLimit = 300.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Zoom")
+	float ZoomMaxLimit = 3000.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Zoom")
+	float ZoomSpeed = 100.f;
 
 	
 };

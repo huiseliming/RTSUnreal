@@ -27,7 +27,7 @@ AWar3CameraPawn::AWar3CameraPawn()
 	// Create SpringArmComponent attach to RootComponent
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(Sphere);
-	SpringArm->TargetArmLength = 1000.0f;
+	SpringArm->TargetArmLength = 1500.f;
 	SpringArm->bDoCollisionTest = false;
 	// Create CameraComponent attach to SpringArmComponent
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -44,7 +44,7 @@ AWar3CameraPawn::AWar3CameraPawn()
 void AWar3CameraPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	SpringArm->TargetArmLength = DefaultZoomValue;
 }
 
 // Called every frame
@@ -58,8 +58,12 @@ void AWar3CameraPawn::Tick(float DeltaTime)
 void AWar3CameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	// BindAction
+	PlayerInputComponent->BindAction(TEXT("ZoomReset"), EInputEvent::IE_Pressed,this,&AWar3CameraPawn::ZoomReset);
+	// BindAxis 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AWar3CameraPawn::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AWar3CameraPawn::MoveRight);
+	PlayerInputComponent->BindAxis(TEXT("Zoom"), this, &AWar3CameraPawn::Zoom);
 }
 
 void AWar3CameraPawn::MoveForward(float Value)
@@ -70,4 +74,14 @@ void AWar3CameraPawn::MoveForward(float Value)
 void AWar3CameraPawn::MoveRight(float Value)
 {
 	FloatingPawn->AddInputVector(FVector(0.f,Value,0.f));	
+}
+
+void AWar3CameraPawn::Zoom(float Value)
+{
+	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + Value * ZoomSpeed,ZoomMinLimit,ZoomMaxLimit);
+}
+
+void AWar3CameraPawn::ZoomReset()
+{
+	SpringArm->TargetArmLength = DefaultZoomValue;
 }
