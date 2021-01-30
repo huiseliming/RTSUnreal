@@ -45,19 +45,33 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// Move
-	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
-	void MoveForward(float Value);
-	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
-	void MoveRight(float Value);
-
-
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn|Move")
+	void AxisInputMoveForward(float Value);
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn|Move")
+	void AxisInputMoveRight(float Value);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Move")
+	float MoveSpeed = 1.0f;
+	
+	//Rotate
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn|Rotate")
+	void ActionInputPressedRotate();
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn|Rotate")
+	void ActionInputReleasedRotate();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Rotate")
+	float RotatePitchSpeed = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Rotate")
+	float RotateYawSpeed = 1.0f;
+private:
+	bool bRotateEnableFlag = false;
+	
+public:
 	
 	// Zoom
-	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
-	void Zoom(float Value);
-	UFUNCTION(BlueprintCallable,Category="War3CameraPawn")
-    void ZoomReset();
-
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn|Zoom")
+	void AxisInputZoom(float Value);
+	UFUNCTION(BlueprintCallable,Category="War3CameraPawn|Zoom")
+    void ActionInputPressedZoomReset();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Zoom")
 	float DefaultZoomValue = 1500.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Zoom")
