@@ -13,5 +13,7 @@ UCLASS()
 class WAR3UNREAL_API AWar3GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+
+
 	
 };

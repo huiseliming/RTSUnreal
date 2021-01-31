@@ -83,13 +83,11 @@ void AWar3CameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AWar3CameraPawn::AxisInputMoveForward(float Value)
 {
-	GLog->Log(FString::Printf(TEXT("%s") ,*(GetActorForwardVector().Projection().GetUnsafeNormal().ToString())));
 	FloatingPawn->AddInputVector(FVector::VectorPlaneProject(GetActorForwardVector(),FVector::UpVector).GetUnsafeNormal() * Value * MoveSpeed);
 }
 
 void AWar3CameraPawn::AxisInputMoveRight(float Value)
 {
-	GLog->Log(FString::Printf(TEXT("%s") ,*(GetActorForwardVector().Projection().GetUnsafeNormal().ToString())));
 	FloatingPawn->AddInputVector(FVector::VectorPlaneProject(GetActorRightVector(),FVector::UpVector).GetUnsafeNormal() * Value * MoveSpeed);	
 }
 

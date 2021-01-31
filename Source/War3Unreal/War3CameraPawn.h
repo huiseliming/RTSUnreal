@@ -55,9 +55,9 @@ public:
 	UFUNCTION(BlueprintCallable,Category="War3CameraPawn|Rotate")
 	void ActionInputReleasedRotate();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Rotate")
-	float RotatePitchSpeed = 1.0f;
+	float RotatePitchSpeed = 3.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Rotate")
-	float RotateYawSpeed = 1.0f;
+	float RotateYawSpeed = 3.0f;
 private:
 	bool bRotateEnableFlag = false;
 	
