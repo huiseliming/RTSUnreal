@@ -14,12 +14,10 @@ AWar3CameraPawn::AWar3CameraPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	// Create SceneComponent as RootComponent 
-	Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
-	RootComponent = Scene;
+	// Create SceneComponent as RootComponent
 	
 	Sphere = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Sphere")); 
-	Sphere->SetupAttachment(RootComponent);
+	RootComponent = Sphere;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereMeshAsset(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'"));
 	Sphere->SetStaticMesh(SphereMeshAsset.Object);
 	Sphere->SetRelativeRotation(FRotator(-70.f,0.f,0.f));
@@ -30,13 +28,15 @@ AWar3CameraPawn::AWar3CameraPawn()
 	SpringArm->SetupAttachment(Sphere);
 	SpringArm->TargetArmLength = 1500.f;
 	SpringArm->bDoCollisionTest = false;
+	SpringArm->bEnableCameraLag = true;
+	SpringArm->bEnableCameraRotationLag = true;
 	// Create CameraComponent attach to SpringArmComponent
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
 	FloatingPawn = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawn"));
 	
-	// |-SceneComponent
+	// |-SphereComponent
 	//   |-SpringArmComponent
 	//	   |-CameraComponent
 }
@@ -46,12 +46,14 @@ void AWar3CameraPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	SpringArm->TargetArmLength = DefaultZoomValue;
+	TargetArmLengthValue = SpringArm->TargetArmLength;
 }
 
 // Called every frame
 void AWar3CameraPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, TargetArmLengthValue, DeltaTime, TargetArmLengthLagSpeed);
 	if (bRotateEnableFlag)
 	{
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
@@ -81,12 +83,14 @@ void AWar3CameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AWar3CameraPawn::AxisInputMoveForward(float Value)
 {
-	FloatingPawn->AddInputVector(FVector(Value * MoveSpeed,0.f,0.f));
+	GLog->Log(FString::Printf(TEXT("%s") ,*(GetActorForwardVector().Projection().GetUnsafeNormal().ToString())));
+	FloatingPawn->AddInputVector(FVector::VectorPlaneProject(GetActorForwardVector(),FVector::UpVector).GetUnsafeNormal() * Value * MoveSpeed);
 }
 
 void AWar3CameraPawn::AxisInputMoveRight(float Value)
 {
-	FloatingPawn->AddInputVector(FVector(0.f,Value * MoveSpeed,0.f));	
+	GLog->Log(FString::Printf(TEXT("%s") ,*(GetActorForwardVector().Projection().GetUnsafeNormal().ToString())));
+	FloatingPawn->AddInputVector(FVector::VectorPlaneProject(GetActorRightVector(),FVector::UpVector).GetUnsafeNormal() * Value * MoveSpeed);	
 }
 
 void AWar3CameraPawn::ActionInputPressedRotate()
@@ -101,10 +105,10 @@ void AWar3CameraPawn::ActionInputReleasedRotate()
 
 void AWar3CameraPawn::AxisInputZoom(float Value)
 {
-	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + Value * ZoomSpeed,ZoomMinLimit,ZoomMaxLimit);
+	TargetArmLengthValue = FMath::Clamp(TargetArmLengthValue + Value * ZoomSpeed,ZoomMinLimit,ZoomMaxLimit);
 }
 
 void AWar3CameraPawn::ActionInputPressedZoomReset()
 {
-	SpringArm->TargetArmLength = DefaultZoomValue;
+	TargetArmLengthValue = DefaultZoomValue;
 }

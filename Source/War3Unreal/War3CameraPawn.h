@@ -18,9 +18,6 @@ public:
 
 	// Components Variable
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="War3CameraPawn")
-	class USceneComponent* Scene = nullptr;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="War3CameraPawn")
 	class UStaticMeshComponent* Sphere = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="War3CameraPawn", meta=(AllowPrivateAccess = "true"))
@@ -80,6 +77,9 @@ public:
 	float ZoomMaxLimit = 3000.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Zoom")
 	float ZoomSpeed = 100.f;
-
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Zoom")
+	float TargetArmLengthLagSpeed = 10.f;
+private:
+	float TargetArmLengthValue = 0.0f;
 };
