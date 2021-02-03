@@ -53,6 +53,7 @@ void AWar3CameraPawn::BeginPlay()
 void AWar3CameraPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	// 
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, TargetArmLengthValue, DeltaTime, TargetArmLengthLagSpeed);
 	if (bRotateEnableFlag)
 	{
@@ -64,6 +65,36 @@ void AWar3CameraPawn::Tick(float DeltaTime)
 			FMath::Clamp(Rotator.Pitch + MouseDeltaY * RotatePitchSpeed,-70.f,0.f),
 			Rotator.Yaw + MouseDeltaX * RotateYawSpeed,
 			0.f));
+	}
+	//
+	APlayerController* PlayerController = Cast<APlayerController>(Controller);
+	if(PlayerController)
+	{
+		int32 ViewportSizeX,ViewportSizeY;
+		float MouseLocationX,MouseLocationY;
+		PlayerController->GetViewportSize(ViewportSizeX,ViewportSizeY);
+		if (ViewportSizeX != 0 && PlayerController->GetMousePosition(MouseLocationX,MouseLocationY))
+		{
+			//GLog->Log(FString::Printf(TEXT("%d, %d, %f, %f"),  ViewportSizeX, ViewportSizeY, MouseLocationX, MouseLocationY));
+			const float Viewport1KBase = FMath::Min(ViewportSizeY,ViewportSizeY) / 1080.f;
+			const float EdgeMoveWidth = EdgeMoveWidthMultiplier * Viewport1KBase;
+			if (MouseLocationX + EdgeMoveWidth >= ViewportSizeX)
+			{
+				AxisInputMoveRight(	(EdgeMoveWidth - (ViewportSizeX - MouseLocationX)) / EdgeMoveWidth);
+			}
+			if (MouseLocationX - EdgeMoveWidth <= 0.f)
+			{
+				AxisInputMoveRight((- EdgeMoveWidth - MouseLocationX) / EdgeMoveWidth);
+			}
+			if (MouseLocationY + EdgeMoveWidth >= ViewportSizeY)
+			{
+				AxisInputMoveForward(-(EdgeMoveWidth - (ViewportSizeY - MouseLocationY)) / EdgeMoveWidth);
+			}
+			if (MouseLocationY - EdgeMoveWidth <= 0.f)
+			{
+				AxisInputMoveForward((EdgeMoveWidth - MouseLocationY) / EdgeMoveWidth);
+			}
+		}
 	}
 }
 

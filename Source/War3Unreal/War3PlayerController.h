@@ -19,10 +19,6 @@ public:
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
-	UPROPERTY()
-	class AWar3CameraPawn* War3CameraPawn = nullptr;
 
 	
-	UPROPERTY(EditAnywhere, Category="AWar3PlayerController")
-	float EdgeMoveWidthMultiplier = 10.f;
 };

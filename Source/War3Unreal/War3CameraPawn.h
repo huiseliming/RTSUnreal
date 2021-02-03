@@ -48,6 +48,9 @@ public:
 	void AxisInputMoveRight(float Value);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="War3CameraPawn|Move")
 	float MoveSpeed = 1.0f;
+	// Edge Move
+	UPROPERTY(EditAnywhere, Category="AWar3PlayerController")
+	float EdgeMoveWidthMultiplier = 10.f;
 	
 	//Rotate
 	UFUNCTION(BlueprintCallable,Category="War3CameraPawn|Rotate")
