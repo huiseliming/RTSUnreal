@@ -22,7 +22,7 @@ protected:
 
 	UFUNCTION(BlueprintPure, Category="War3GameState")
 	void GetGameTime(float& GameTime, int32& Day, int32& Hour, int32& Minute, int32& Second);
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="War3GameState")
 	float GameSpeed = 1.0f;
 	UPROPERTY(BlueprintReadOnly, Category="War3GameState")

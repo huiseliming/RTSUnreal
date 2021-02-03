@@ -18,6 +18,7 @@ void AWar3GameState::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	// Calculate GameTime
+	//GameTimeSeconds = UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
 	GameTimeSeconds += DeltaSeconds * GameSpeed;
 	const float DaySeconds = 24.f * 60.f * 60.f;
 	if (GameTimeSeconds > DaySeconds)
@@ -25,7 +26,7 @@ void AWar3GameState::Tick(float DeltaSeconds)
 		GameTimeSeconds -= DaySeconds;
 		GameDay += 1;
 	}
-	GLog->Log(FString::Printf(TEXT("%f"), GameTimeSeconds));
+	//GLog->Log(FString::Printf(TEXT("%f"), GameTimeSeconds));
 	// Update sun direction
 	
 }
