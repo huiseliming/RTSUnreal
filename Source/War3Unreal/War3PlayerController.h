@@ -19,6 +19,7 @@ public:
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
-
-	
+private:
+	UFUNCTION(BlueprintPure, Category="War3PlayerController")
+	FVector GetCursorWorldPlacement(float Distance = 10000.f);
 };

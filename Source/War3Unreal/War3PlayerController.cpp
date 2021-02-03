@@ -25,3 +25,15 @@ void AWar3PlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 }
+
+FVector AWar3PlayerController::GetCursorWorldPlacement(float Distance)
+{
+	FVector WorldLocation, WorldDirection;
+	DeprojectMousePositionToWorld(WorldLocation,WorldDirection);
+	FHitResult Hit;
+	if (GetWorld()->LineTraceSingleByChannel(Hit,WorldLocation,WorldLocation + Distance * WorldDirection, ECollisionChannel::ECC_Visibility))
+	{
+		return Hit.Location;
+	}
+	return FVector();
+}
