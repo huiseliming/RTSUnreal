@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "War3CameraPawn.h"
+#include "RTSCameraPawn.h"
 
 
 #include "Camera/CameraComponent.h"
@@ -10,7 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
-AWar3CameraPawn::AWar3CameraPawn()
+ARTSCameraPawn::ARTSCameraPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -42,7 +42,7 @@ AWar3CameraPawn::AWar3CameraPawn()
 }
 
 // Called when the game starts or when spawned
-void AWar3CameraPawn::BeginPlay()
+void ARTSCameraPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	SpringArm->TargetArmLength = DefaultZoomValue;
@@ -50,7 +50,7 @@ void AWar3CameraPawn::BeginPlay()
 }
 
 // Called every frame
-void AWar3CameraPawn::Tick(float DeltaTime)
+void ARTSCameraPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	// 
@@ -99,45 +99,45 @@ void AWar3CameraPawn::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void AWar3CameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ARTSCameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// BindAction
-	PlayerInputComponent->BindAction(TEXT("Rotate"), EInputEvent::IE_Pressed, this, &AWar3CameraPawn::ActionInputPressedRotate);
-	PlayerInputComponent->BindAction(TEXT("Rotate"), EInputEvent::IE_Released, this, &AWar3CameraPawn::ActionInputReleasedRotate);
-	PlayerInputComponent->BindAction(TEXT("ZoomReset"), EInputEvent::IE_Pressed,this, &AWar3CameraPawn::ActionInputPressedZoomReset);
+	PlayerInputComponent->BindAction(TEXT("Rotate"), EInputEvent::IE_Pressed, this, &ARTSCameraPawn::ActionInputPressedRotate);
+	PlayerInputComponent->BindAction(TEXT("Rotate"), EInputEvent::IE_Released, this, &ARTSCameraPawn::ActionInputReleasedRotate);
+	PlayerInputComponent->BindAction(TEXT("ZoomReset"), EInputEvent::IE_Pressed,this, &ARTSCameraPawn::ActionInputPressedZoomReset);
 	// BindAxis 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AWar3CameraPawn::AxisInputMoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AWar3CameraPawn::AxisInputMoveRight);
-	PlayerInputComponent->BindAxis(TEXT("Zoom"), this, &AWar3CameraPawn::AxisInputZoom);
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ARTSCameraPawn::AxisInputMoveForward);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ARTSCameraPawn::AxisInputMoveRight);
+	PlayerInputComponent->BindAxis(TEXT("Zoom"), this, &ARTSCameraPawn::AxisInputZoom);
 }
 
-void AWar3CameraPawn::AxisInputMoveForward(float Value)
+void ARTSCameraPawn::AxisInputMoveForward(float Value)
 {
 	FloatingPawn->AddInputVector(FVector::VectorPlaneProject(GetActorForwardVector(),FVector::UpVector).GetUnsafeNormal() * Value * MoveSpeed);
 }
 
-void AWar3CameraPawn::AxisInputMoveRight(float Value)
+void ARTSCameraPawn::AxisInputMoveRight(float Value)
 {
 	FloatingPawn->AddInputVector(FVector::VectorPlaneProject(GetActorRightVector(),FVector::UpVector).GetUnsafeNormal() * Value * MoveSpeed);	
 }
 
-void AWar3CameraPawn::ActionInputPressedRotate()
+void ARTSCameraPawn::ActionInputPressedRotate()
 {
 	bRotateEnableFlag = true;
 }
 
-void AWar3CameraPawn::ActionInputReleasedRotate()
+void ARTSCameraPawn::ActionInputReleasedRotate()
 {
 	bRotateEnableFlag = false;
 }
 
-void AWar3CameraPawn::AxisInputZoom(float Value)
+void ARTSCameraPawn::AxisInputZoom(float Value)
 {
 	TargetArmLengthValue = FMath::Clamp(TargetArmLengthValue + Value * ZoomSpeed,ZoomMinLimit,ZoomMaxLimit);
 }
 
-void AWar3CameraPawn::ActionInputPressedZoomReset()
+void ARTSCameraPawn::ActionInputPressedZoomReset()
 {
 	TargetArmLengthValue = DefaultZoomValue;
 }

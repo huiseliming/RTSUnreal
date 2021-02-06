@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "War3FunctionLibrary.generated.h"
+#include "RTSFunctionLibrary.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WAR3UNREAL_API UWar3FunctionLibrary : public UBlueprintFunctionLibrary
+class RTSUNREAL_API URTSFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
 
-	//UFUNCTION(BlueprintCallable, Category = "War3FunctionLibrary", meta = (WorldContext = WorldContextObject))
+	//UFUNCTION(BlueprintCallable, Category = "RTSFunctionLibrary", meta = (WorldContext = WorldContextObject))
 	//static FVector GetCursorWorldPlacement(UObject* WorldContextObject, APlayerController* PlayerController, float Distance);
 	
 };

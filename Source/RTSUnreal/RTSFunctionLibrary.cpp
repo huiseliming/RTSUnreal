@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "War3FunctionLibrary.h"
+#include "RTSFunctionLibrary.h"
 
 #include "Kismet/GameplayStatics.h"
 
-// FVector UWar3FunctionLibrary::GetCursorWorldPlacement(UObject* WorldContextObject, APlayerController* PlayerController, float Distance)
+// FVector URTSFunctionLibrary::GetCursorWorldPlacement(UObject* WorldContextObject, APlayerController* PlayerController, float Distance)
 // {
 // 	FVector WorldLocation, WorldDirection;
 // 	PlayerController->DeprojectMousePositionToWorld(WorldLocation,WorldDirection);

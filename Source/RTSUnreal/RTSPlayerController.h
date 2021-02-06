@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "War3PlayerController.generated.h"
+#include "RTSPlayerController.generated.h"
 
-class AWar3Unit;
+class ARTSUnit;
 /**
  * 
  */
 UCLASS()
-class WAR3UNREAL_API AWar3PlayerController : public APlayerController
+class RTSUNREAL_API ARTSPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 public:
-	AWar3PlayerController();
+	ARTSPlayerController();
 
 	UFUNCTION()
     void ActionInputMousePressed();
@@ -27,7 +27,7 @@ public:
 	UFUNCTION()
 	void DragSelect();
 	
-	TArray<AWar3Unit*> CurrentSelectedUints;
+	TArray<ARTSUnit*> CurrentSelectedUints;
 
 	
 protected:
@@ -37,10 +37,10 @@ protected:
 	virtual void SetupInputComponent() override;
 	
 private:
-	UFUNCTION(BlueprintPure, Category="War3PlayerController")
+	UFUNCTION(BlueprintPure, Category="RTSPlayerController")
 	FVector GetCursorWorldPlacement(const float Distance = 10000.f);
 	
-	friend class AWar3HUD;
+	friend class ARTSHUD;
 	bool bIsMouseClicked = false;
 	FVector2D MouseClickedPos;
 	FVector2D MouseHoldingPos;

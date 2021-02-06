@@ -3,15 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/GameInstance.h"
-#include "War3GameInstance.generated.h"
+#include "GameFramework/GameModeBase.h"
+#include "RTSGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WAR3UNREAL_API UWar3GameInstance : public UGameInstance
+class RTSUNREAL_API ARTSGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+	ARTSGameMode();
+
 };

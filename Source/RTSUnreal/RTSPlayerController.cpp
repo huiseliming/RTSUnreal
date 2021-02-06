@@ -1,20 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "War3PlayerController.h"
+#include "RTSPlayerController.h"
 
-#include "War3Unit.h"
+#include "RTSUnit.h"
 #include "GameFramework/HUD.h"
 #include "Kismet/GameplayStatics.h"
 
-AWar3PlayerController::AWar3PlayerController()
+ARTSPlayerController::ARTSPlayerController()
 {
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true;
 }
 
-void AWar3PlayerController::ActionInputMousePressed()
+void ARTSPlayerController::ActionInputMousePressed()
 {
 	if (GetMousePosition(MouseClickedPos.X, MouseClickedPos.Y))
 	{
@@ -24,7 +24,7 @@ void AWar3PlayerController::ActionInputMousePressed()
 	}
 }
 
-void AWar3PlayerController::ActionInputMouseReleased()
+void ARTSPlayerController::ActionInputMouseReleased()
 {
 	bIsMouseClicked = false;
 	if((MouseHoldingPos - MouseClickedPos).Size() > 3.0f)
@@ -33,19 +33,19 @@ void AWar3PlayerController::ActionInputMouseReleased()
 		SimpleSelect();
 }
 
-void AWar3PlayerController::SimpleSelect()
+void ARTSPlayerController::SimpleSelect()
 {
-	TArray<AWar3Unit*> SelectedUnits;
-	//GLog->Log(TEXT("AWar3PlayerController::SimpleSelect()"));
+	TArray<ARTSUnit*> SelectedUnits;
+	//GLog->Log(TEXT("ARTSPlayerController::SimpleSelect()"));
 }
 
-void AWar3PlayerController::DragSelect()
+void ARTSPlayerController::DragSelect()
 {
-	TArray<AWar3Unit*> SelectedUnits;
-	//GLog->Log(TEXT("AWar3PlayerController::DragSelect()"));
+	TArray<ARTSUnit*> SelectedUnits;
+	//GLog->Log(TEXT("ARTSPlayerController::DragSelect()"));
 }
 
-void AWar3PlayerController::BeginPlay()
+void ARTSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	// Setup InputMode
@@ -55,12 +55,12 @@ void AWar3PlayerController::BeginPlay()
 	SetInputMode(InputModeGameAndUI);
 }
 
-void AWar3PlayerController::Tick(float DeltaSeconds)
+void ARTSPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 }
 
-void AWar3PlayerController::SetupInputComponent()
+void ARTSPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	// if (InputComponent == nullptr)
@@ -68,11 +68,11 @@ void AWar3PlayerController::SetupInputComponent()
 	// 	InputComponent = NewObject<UInputComponent>(this,"InputComponent");
 	// 	InputComponent->RegisterComponent();
 	// }
-	InputComponent->BindAction(TEXT("LeftMouseClick"), EInputEvent::IE_Pressed, this, &AWar3PlayerController::ActionInputMousePressed);
-	InputComponent->BindAction(TEXT("LeftMouseClick"), EInputEvent::IE_Released, this, &AWar3PlayerController::ActionInputMouseReleased);
+	InputComponent->BindAction(TEXT("LeftMouseClick"), EInputEvent::IE_Pressed, this, &ARTSPlayerController::ActionInputMousePressed);
+	InputComponent->BindAction(TEXT("LeftMouseClick"), EInputEvent::IE_Released, this, &ARTSPlayerController::ActionInputMouseReleased);
 }
 
-FVector AWar3PlayerController::GetCursorWorldPlacement(const float Distance)
+FVector ARTSPlayerController::GetCursorWorldPlacement(const float Distance)
 {
 	FVector WorldLocation, WorldDirection;
 	DeprojectMousePositionToWorld(WorldLocation,WorldDirection);

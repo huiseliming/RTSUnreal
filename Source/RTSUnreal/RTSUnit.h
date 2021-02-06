@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "War3Unit.generated.h"
+#include "RTSUnit.generated.h"
 
 UCLASS()
-class WAR3UNREAL_API AWar3Unit : public ACharacter
+class RTSUNREAL_API ARTSUnit : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AWar3Unit();
+	ARTSUnit();
 
 protected:
 	// Called when the game starts or when spawned

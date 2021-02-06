@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "War3HUD.generated.h"
+#include "RTSHUD.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WAR3UNREAL_API AWar3HUD : public AHUD
+class RTSUNREAL_API ARTSHUD : public AHUD
 {
 	GENERATED_BODY()
 
@@ -20,5 +20,5 @@ class WAR3UNREAL_API AWar3HUD : public AHUD
 	
 private:
 	UPROPERTY()
-	class AWar3PlayerController* War3PlayerController = nullptr;
+	class ARTSPlayerController* RTSPlayerController = nullptr;
 };

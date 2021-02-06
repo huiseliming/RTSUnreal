@@ -1,20 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "War3GameState.h"
+#include "RTSGameState.h"
 
-AWar3GameState::AWar3GameState()
+ARTSGameState::ARTSGameState()
 {
 	// GameState default disable Tick, so enable tick
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AWar3GameState::BeginPlay()
+void ARTSGameState::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void AWar3GameState::Tick(float DeltaSeconds)
+void ARTSGameState::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	// Calculate GameTime
@@ -31,7 +31,7 @@ void AWar3GameState::Tick(float DeltaSeconds)
 	
 }
 
-void AWar3GameState::GetGameTime(float& GameTime, int32& Day, int32& Hour, int32& Minute, int32& Second)
+void ARTSGameState::GetGameTime(float& GameTime, int32& Day, int32& Hour, int32& Minute, int32& Second)
 {
 	GameTime = this->GameTimeSeconds;
 	Day = this->GameDay;

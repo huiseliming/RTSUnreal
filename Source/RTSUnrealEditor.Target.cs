@@ -3,13 +3,13 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class War3UnrealEditorTarget : TargetRules
+public class RTSUnrealEditorTarget : TargetRules
 {
-	public War3UnrealEditorTarget(TargetInfo Target) : base(Target)
+	public RTSUnrealEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 
-		ExtraModuleNames.AddRange( new string[] { "War3Unreal" } );
+		ExtraModuleNames.AddRange( new string[] { "RTSUnreal" } );
 	}
 }
