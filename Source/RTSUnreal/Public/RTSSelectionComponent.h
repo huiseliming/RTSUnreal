@@ -6,6 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "RTSSelectionComponent.generated.h"
 
+class ARTSPlayerController;
+class ARTSHUD;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRTSSelectionComponentSelectedSignature, AActor*, Actor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRTSSelectionComponentDeselectedSignature, AActor*, Actor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRTSSelectionComponentHoveredSignature, AActor*, Actor);
@@ -23,10 +26,16 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable, Category="RTS|SelectionComponent")
+	void Select();
+	UFUNCTION(BlueprintCallable, Category="RTS|SelectionComponent")
+	void SelectBox(FVector2D FirstPoint, FVector2D SecondPoint);
 
 	UFUNCTION(BlueprintPure, Category="RTS|SelectionComponent")
 	AActor* GetSelectedActor() { return CurrentSelectedActors.IsValidIndex(CurrentSelectedActorIndex) ? CurrentSelectedActors[CurrentSelectedActorIndex] : nullptr;}
@@ -35,16 +44,19 @@ public:
 
 	// Delegates
 	UPROPERTY(BlueprintAssignable, Category = "RTS|SelectionComponent")
-	FRTSSelectionComponentSelectedSignature OnRTSSelectionComponentSelected;
+	FRTSSelectionComponentSelectedSignature OnRTSSelectionSelected;
 	UPROPERTY(BlueprintAssignable, Category = "RTS|SelectionComponent")
-    FRTSSelectionComponentDeselectedSignature OnRTSSelectionComponentDeselected;
+    FRTSSelectionComponentDeselectedSignature OnRTSSelectionDeselected;
 	UPROPERTY(BlueprintAssignable, Category = "RTS|SelectionComponent")
-    FRTSSelectionComponentHoveredSignature OnRTSSelectionComponentHovered;
+    FRTSSelectionComponentHoveredSignature OnRTSSelectionHovered;
 	UPROPERTY(BlueprintAssignable, Category = "RTS|SelectionComponent")
-    FRTSSelectionComponentUnhoveredSignature OnRTSSelectionComponentUnhovered;
+    FRTSSelectionComponentUnhoveredSignature OnRTSSelectionUnhovered;
 
 	//
-	
+	UPROPERTY(EditDefaultsOnly, Category="RTS|SelectionComponent")
+	bool bSelectBoxIncludeNonCollidingComponents = true;
+	UPROPERTY(EditDefaultsOnly, Category="RTS|SelectionComponent")
+	bool bSelectBoxActorMustBeFullyEnclosed = false;
 	
 private:
 	UPROPERTY()
@@ -61,4 +73,11 @@ private:
 
 	UPROPERTY()
 	UMaterialInstance * SelectionCircleMaterialInstance = nullptr;
+
+	UPROPERTY()
+	ARTSPlayerController* RTSPlayerController = nullptr;
+	
+	UPROPERTY()
+	ARTSHUD* RTSHUD = nullptr;
+	
 };

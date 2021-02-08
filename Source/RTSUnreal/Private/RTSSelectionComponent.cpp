@@ -3,6 +3,11 @@
 
 #include "RTSSelectionComponent.h"
 
+
+#include "RTSHUD.h"
+#include "RTSPlayerController.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values for this component's properties
 URTSSelectionComponent::URTSSelectionComponent()
 {
@@ -20,7 +25,15 @@ void URTSSelectionComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	RTSPlayerController = Cast<ARTSPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(),0));
+	RTSHUD = Cast<ARTSHUD>(RTSPlayerController->GetHUD());
+}
+
+void URTSSelectionComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	for (auto CurrentSelectedActor : CurrentSelectedActors)
+		OnRTSSelectionDeselected.Broadcast(CurrentSelectedActor);
+	CurrentSelectedActors.Empty();
 }
 
 
@@ -30,5 +43,27 @@ void URTSSelectionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	
 }
+
+void URTSSelectionComponent::Select()
+{
+	for (auto CurrentSelectedActor : CurrentSelectedActors)
+		OnRTSSelectionDeselected.Broadcast(CurrentSelectedActor);
+	CurrentSelectedActors.Empty();
+	CurrentSelectedActors.Add(CurrentHoveredActor);
+	for (auto CurrentSelectedActor : CurrentSelectedActors)
+		OnRTSSelectionSelected.Broadcast(CurrentSelectedActor);
+}
+
+void URTSSelectionComponent::SelectBox(FVector2D FirstPoint, FVector2D SecondPoint)
+{
+	for (auto CurrentSelectedActor : CurrentSelectedActors)
+		OnRTSSelectionDeselected.Broadcast(CurrentSelectedActor);
+	CurrentSelectedActors.Empty();
+	RTSHUD->GetActorsInSelectionRectangle(AActor::StaticClass(), FirstPoint, SecondPoint,CurrentSelectedActors, bSelectBoxIncludeNonCollidingComponents, bSelectBoxActorMustBeFullyEnclosed);
+	for (auto CurrentSelectedActor : CurrentSelectedActors)
+		OnRTSSelectionSelected.Broadcast(CurrentSelectedActor);
+}
+
 

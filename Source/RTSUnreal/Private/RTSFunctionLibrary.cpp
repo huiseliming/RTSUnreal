@@ -17,3 +17,16 @@
 // 	}
 // 	return FVector();
 // }
+
+// AActor* URTSFunctionLibrary::LineTraceSingleByRTSChannel(UObject* WorldContextObject, APlayerController* PlayerController, float Distance);
+// {
+// 	FVector WorldLocation, WorldDirection;
+// 	PlayerController->DeprojectMousePositionToWorld(WorldLocation,WorldDirection);
+// 	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject,EGetWorldErrorMode::LogAndReturnNull);
+// 	FHitResult Hit;
+// 	if (World->LineTraceSingleByChannel(Hit,WorldLocation,WorldLocation + Distance * WorldDirection, ECollisionChannel::ECC_Visibility))
+// 	{
+// 			return Hit.GetActor();
+// 	}
+// 	return nullptr;
+// }
