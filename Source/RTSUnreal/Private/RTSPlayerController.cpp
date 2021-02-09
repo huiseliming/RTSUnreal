@@ -19,6 +19,9 @@ ARTSPlayerController::ARTSPlayerController()
 void ARTSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	RTSHUD = Cast<ARTSHUD>(GetHUD());
+	if (!RTSHUD)
+		UE_LOG(RTSLog, Fatal, TEXT("Can't Get RTSHUD From AHUD::GetHUD()"));
 	// Setup InputMode
 	FInputModeGameAndUI InputModeGameAndUI;
 	InputModeGameAndUI.SetHideCursorDuringCapture(false);
@@ -34,32 +37,18 @@ void ARTSPlayerController::Tick(float DeltaSeconds)
 void ARTSPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-
-	RTSHUD = Cast<ARTSHUD>(GetHUD());
-	if (RTSHUD)
-		UE_LOG(RTSLog, Warning, TEXT("Can't Get RTSHUD From AHUD::GetHUD()"));
-	InputComponent->BindAction(TEXT("LeftMouseClick"), EInputEvent::IE_Pressed, this, &ARTSPlayerController::ActionInputSelectBegin);
-	InputComponent->BindAction(TEXT("LeftMouseClick"), EInputEvent::IE_Released, this, &ARTSPlayerController::ActionInputSelectEnd);
+	InputComponent->BindAction(TEXT("RTSSelect"), EInputEvent::IE_Pressed, this, &ARTSPlayerController::ActionInputSelectStart);
+	InputComponent->BindAction(TEXT("RTSSelect"), EInputEvent::IE_Released, this, &ARTSPlayerController::ActionInputSelectFinish);
 }
 
-
-void ARTSPlayerController::ActionInputSelectBegin()
+void ARTSPlayerController::ActionInputSelectStart()
 {
-	FVector2D MousePosition;
-	if (GetMousePosition(MousePosition.X, MousePosition.Y))
-	{
-		RTSHUD->StartSelectionRectangle(MousePosition);
-		bIsMouseClicked = true;
-	}
+	RTSHUD->StartSelectionRectangle();
 }
 
-void ARTSPlayerController::ActionInputSelectEnd()
+void ARTSPlayerController::ActionInputSelectFinish()
 {
-	bIsMouseClicked = false;
-	if((MouseHoldingPos - MouseClickedPos).Size() > 3.0f)
-		RTSSelectionComponent->SelectBox(MouseClickedPos,MouseHoldingPos);
-	else
-		RTSSelectionComponent->Select();
+	RTSHUD->FinishSelectionRectangle();
 }
 
 FVector ARTSPlayerController::GetCursorWorldPlacement(const float Distance)

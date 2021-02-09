@@ -17,7 +17,8 @@ UCLASS()
 class RTSUNREAL_API URTSFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-
+public:
+	
 	UFUNCTION(BlueprintPure, Category = "RTS|FunctionLibrary", meta = (WorldContext = WorldContextObject))
 	static AActor* LineTraceSingleForSelection(UObject* WorldContextObject, APlayerController* PlayerController, float Distance);
 

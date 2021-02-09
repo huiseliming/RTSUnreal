@@ -36,12 +36,11 @@ protected:
 public:
 	/* Select Start */
 	UFUNCTION()
-    void ActionInputSelectBegin();
+    void ActionInputSelectStart();
 	UFUNCTION()
-    void ActionInputSelectEnd();
+    void ActionInputSelectFinish();
+	
 private:
-	bool bSelectUpdate = false;
-	/* Select End */
 	
 	UFUNCTION(BlueprintPure, Category="RTSPlayerController")
     FVector GetCursorWorldPlacement(const float Distance = 10000.f);
