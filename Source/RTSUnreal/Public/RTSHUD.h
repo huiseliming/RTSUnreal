@@ -50,8 +50,10 @@ public:
 	void StartSelectionRectangle();
 	// Finish RTS SelectionRectangle 
 	void FinishSelectionRectangle();
-	// Get RTS SelectionRectangle Actors 
-	TArray<AActor* >& GetSelectionRectangleActors();
+	// Get RTS SelectedActors 
+	TArray<AActor*>& GetSelectedActors();
+	// Get RTS HoveredActors 
+	TArray<AActor*>& GetHoveredActors();
 
 
 	// Delegates

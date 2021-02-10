@@ -19,10 +19,14 @@ void ARTSHUD::BeginPlay()
 
 void ARTSHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	for(auto CurrentHoveredActor : CurrentHoveredActors){
-		OnRTSSelectionHovered.Broadcast(CurrentHoveredActor);
+	for(auto HoveredActor : CurrentHoveredActors){
+		OnRTSSelectionHovered.Broadcast(HoveredActor);
 	}
 	CurrentHoveredActors.Empty();
+	for(auto SelectedActor : CurrentSelectedActors){
+		OnRTSSelectionDeselected.Broadcast(SelectedActor);
+	}
+	CurrentSelectedActors.Empty();
 }
 
 void ARTSHUD::Tick(float DeltaSeconds)
@@ -52,6 +56,7 @@ void ARTSHUD::DrawHUD()
 			// Set RTS SelectedActorClass for find it 
 			const static TArray<UClass*> SelectedActorClassFilters = {ARTSUnit::StaticClass()};
 			TArray<AActor*> OldHoveredActors;
+			OldHoveredActors.Reset();
 			Swap(CurrentHoveredActors,OldHoveredActors);
 			TArray<AActor*> Actors;
 			for (UClass* ActorClass: SelectedActorClassFilters)
@@ -59,53 +64,52 @@ void ARTSHUD::DrawHUD()
 				GetActorsInSelectionRectangle(ActorClass ,SelectionRectangleStart, SelectionRectangleEnd,Actors,false ,false);
 				CurrentHoveredActors.Append(Actors);
 			}
+			// handle Hovered and Unhovered Event;
 			Algo::Sort(CurrentHoveredActors,[](const AActor* A, const AActor* B)
                 {
                     return  reinterpret_cast<uint64>(A) < reinterpret_cast<uint64>(B);
                 });
-			// CurrentHoveredActors.Sort(
-			// 	[](AActor*& A, AActor*& B)
-			// 	{
-			// 		return  reinterpret_cast<uint64>(A) > reinterpret_cast<uint64>(B);
-			// 	});
-			// uint64 LowV = 0;
-			// for (int32 i = 0; i < OldHoveredActors.Num(); i++)
-			// {
-			// 	if(LowV > reinterpret_cast<uint64>(OldHoveredActors[i]))
-			// 	{
-			// 		UE_LOG(RTSLog, Display, TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
-			// 	}else
-			// 	{
-			// 		UE_LOG(RTSLog, Display, TEXT("=============================="));
-			// 	}
-			// 	LowV = reinterpret_cast<uint64>(OldHoveredActors[i]);
-			// }
-			int32 CurrentHoveredActorsIndex = 0;
-			for (int32 i = 0; i < OldHoveredActors.Num(); i++)
+			if(CurrentHoveredActors.Num() == 0)
 			{
-				while (CurrentHoveredActorsIndex < CurrentHoveredActors.Num() && reinterpret_cast<uint64>(OldHoveredActors[i]) > reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
+				for (AActor* Actor : OldHoveredActors)
 				{
-					OnRTSSelectionHovered.Broadcast(CurrentHoveredActors[CurrentHoveredActorsIndex]);
-					UE_LOG(RTSLog, Display, TEXT("RTSSelectionHovered %s"), *CurrentHoveredActors[CurrentHoveredActorsIndex]->GetName());
-					CurrentHoveredActorsIndex++;
-				}
-				if(CurrentHoveredActorsIndex >= CurrentHoveredActors.Num())
-					break;
-				if(reinterpret_cast<uint64>(OldHoveredActors[i]) < reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
-				{
-					OnRTSSelectionUnhovered.Broadcast(OldHoveredActors[i]);
-					UE_LOG(RTSLog, Display, TEXT("RTSSelectionHovered %s"), *OldHoveredActors[i]->GetName());
-				}
-				else if(reinterpret_cast<uint64>(OldHoveredActors[i]) == reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
-				{
-					CurrentHoveredActorsIndex++;
+					OnRTSSelectionUnhovered.Broadcast(Actor);
+					UE_LOG(RTSLog, Display, TEXT("remove %s"), *Actor->GetName());
 				}
 			}
-			while (CurrentHoveredActorsIndex < CurrentHoveredActors.Num())
+			else
 			{
-				OnRTSSelectionHovered.Broadcast(CurrentHoveredActors[CurrentHoveredActorsIndex]);
-				UE_LOG(RTSLog, Display, TEXT("RTSSelectionHovered %s"), *CurrentHoveredActors[CurrentHoveredActorsIndex]->GetName());
-				CurrentHoveredActorsIndex++;
+				int32 CurrentHoveredActorsIndex = 0;
+				for (int32 i = 0; i < OldHoveredActors.Num(); i++)
+				{
+					while (CurrentHoveredActorsIndex < CurrentHoveredActors.Num() && reinterpret_cast<uint64>(OldHoveredActors[i]) > reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
+					{
+						OnRTSSelectionHovered.Broadcast(CurrentHoveredActors[CurrentHoveredActorsIndex]);
+						UE_LOG(RTSLog, Display, TEXT("add %s"), *CurrentHoveredActors[CurrentHoveredActorsIndex]->GetName());
+						CurrentHoveredActorsIndex++;
+					}
+					if(CurrentHoveredActorsIndex >= CurrentHoveredActors.Num())
+					{
+						OnRTSSelectionUnhovered.Broadcast(OldHoveredActors[i]);
+						UE_LOG(RTSLog, Display, TEXT("remove %s"), *OldHoveredActors[i]->GetName());
+						continue;
+					}
+					if(reinterpret_cast<uint64>(OldHoveredActors[i]) < reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
+					{
+						OnRTSSelectionUnhovered.Broadcast(OldHoveredActors[i]);
+						UE_LOG(RTSLog, Display, TEXT("remove %s"), *OldHoveredActors[i]->GetName());
+					}
+					else if(reinterpret_cast<uint64>(OldHoveredActors[i]) == reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
+					{
+						CurrentHoveredActorsIndex++;
+					}
+				}
+				while (CurrentHoveredActorsIndex < CurrentHoveredActors.Num())
+				{
+					OnRTSSelectionHovered.Broadcast(CurrentHoveredActors[CurrentHoveredActorsIndex]);
+					UE_LOG(RTSLog, Display, TEXT("add %s"), *CurrentHoveredActors[CurrentHoveredActorsIndex]->GetName());
+					CurrentHoveredActorsIndex++;
+				}
 			}
 		}
 		else
@@ -141,6 +145,11 @@ void ARTSHUD::DrawHUD()
 		{
 			bSelectionFinish = false;
 			BoxSelect();
+			for (AActor* Actor : CurrentHoveredActors)
+			{
+				OnRTSSelectionUnhovered.Broadcast(Actor);
+			}
+			CurrentHoveredActors.Empty();
 		}
 	}
 }
@@ -192,7 +201,7 @@ void ARTSHUD::StartSelectionRectangle()
 
 void ARTSHUD::FinishSelectionRectangle()
 {
-	UE_LOG(RTSLog, Display, TEXT("FinishSelectionRectangle"));
+	//UE_LOG(RTSLog, Display, TEXT("FinishSelectionRectangle"));
 	bSelectionUpdate = false;
 	if(RTSPlayerController->GetMousePosition(SelectionRectangleEnd.X, SelectionRectangleEnd.Y))
 	{
@@ -203,7 +212,12 @@ void ARTSHUD::FinishSelectionRectangle()
 	}
 }
 
-TArray<AActor*>& ARTSHUD::GetSelectionRectangleActors()
+TArray<AActor*>& ARTSHUD::GetSelectedActors()
 {
 	return CurrentSelectedActors;
+}
+
+TArray<AActor*>& ARTSHUD::GetHoveredActors()
+{
+	return CurrentHoveredActors;
 }
