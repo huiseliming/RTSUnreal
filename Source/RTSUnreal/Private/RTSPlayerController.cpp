@@ -21,7 +21,7 @@ void ARTSPlayerController::BeginPlay()
 	Super::BeginPlay();
 	RTSHUD = Cast<ARTSHUD>(GetHUD());
 	if (!RTSHUD)
-		UE_LOG(RTSLog, Fatal, TEXT("Can't Get RTSHUD From AHUD::GetHUD()"));
+		UE_LOG(LogRTS, Fatal, TEXT("Can't Get RTSHUD From AHUD::GetHUD()"));
 	// Setup InputMode
 	FInputModeGameAndUI InputModeGameAndUI;
 	InputModeGameAndUI.SetHideCursorDuringCapture(false);

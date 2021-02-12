@@ -14,7 +14,7 @@ void ARTSHUD::BeginPlay()
 	Super::BeginPlay();
 	RTSPlayerController = Cast<ARTSPlayerController>(GetOwningPlayerController());
 	if(!RTSPlayerController)
-		UE_LOG(RTSLog, Fatal, TEXT("OwningPlayerController is not a RTSPlayerController "));
+		UE_LOG(LogRTS, Fatal, TEXT("OwningPlayerController is not a RTSPlayerController "));
 }
 
 void ARTSHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -74,7 +74,7 @@ void ARTSHUD::DrawHUD()
 				for (AActor* Actor : OldHoveredActors)
 				{
 					OnRTSSelectionUnhovered.Broadcast(Actor);
-					UE_LOG(RTSLog, Display, TEXT("remove %s"), *Actor->GetName());
+					UE_LOG(LogRTS, Display, TEXT("remove %s"), *Actor->GetName());
 				}
 			}
 			else
@@ -85,19 +85,19 @@ void ARTSHUD::DrawHUD()
 					while (CurrentHoveredActorsIndex < CurrentHoveredActors.Num() && reinterpret_cast<uint64>(OldHoveredActors[i]) > reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
 					{
 						OnRTSSelectionHovered.Broadcast(CurrentHoveredActors[CurrentHoveredActorsIndex]);
-						UE_LOG(RTSLog, Display, TEXT("add %s"), *CurrentHoveredActors[CurrentHoveredActorsIndex]->GetName());
+						UE_LOG(LogRTS, Display, TEXT("add %s"), *CurrentHoveredActors[CurrentHoveredActorsIndex]->GetName());
 						CurrentHoveredActorsIndex++;
 					}
 					if(CurrentHoveredActorsIndex >= CurrentHoveredActors.Num())
 					{
 						OnRTSSelectionUnhovered.Broadcast(OldHoveredActors[i]);
-						UE_LOG(RTSLog, Display, TEXT("remove %s"), *OldHoveredActors[i]->GetName());
+						UE_LOG(LogRTS, Display, TEXT("remove %s"), *OldHoveredActors[i]->GetName());
 						continue;
 					}
 					if(reinterpret_cast<uint64>(OldHoveredActors[i]) < reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
 					{
 						OnRTSSelectionUnhovered.Broadcast(OldHoveredActors[i]);
-						UE_LOG(RTSLog, Display, TEXT("remove %s"), *OldHoveredActors[i]->GetName());
+						UE_LOG(LogRTS, Display, TEXT("remove %s"), *OldHoveredActors[i]->GetName());
 					}
 					else if(reinterpret_cast<uint64>(OldHoveredActors[i]) == reinterpret_cast<uint64>(CurrentHoveredActors[CurrentHoveredActorsIndex]))
 					{
@@ -107,7 +107,7 @@ void ARTSHUD::DrawHUD()
 				while (CurrentHoveredActorsIndex < CurrentHoveredActors.Num())
 				{
 					OnRTSSelectionHovered.Broadcast(CurrentHoveredActors[CurrentHoveredActorsIndex]);
-					UE_LOG(RTSLog, Display, TEXT("add %s"), *CurrentHoveredActors[CurrentHoveredActorsIndex]->GetName());
+					UE_LOG(LogRTS, Display, TEXT("add %s"), *CurrentHoveredActors[CurrentHoveredActorsIndex]->GetName());
 					CurrentHoveredActorsIndex++;
 				}
 			}
@@ -162,7 +162,7 @@ void ARTSHUD::SingleSelect()
 	if (CurrentHoveredActors.IsValidIndex(0) && CurrentHoveredActors[0] != nullptr)
 	{
 		AActor* CurrentHoveredActor = CurrentHoveredActors[0];
-		UE_LOG(RTSLog, Display, TEXT("SingleSelect Actor %s"), *CurrentHoveredActor->GetName());
+		UE_LOG(LogRTS, Display, TEXT("SingleSelect Actor %s"), *CurrentHoveredActor->GetName());
 		CurrentSelectedActors.Add(CurrentHoveredActor);
 		OnRTSSelectionSelected.Broadcast(CurrentHoveredActor);
 		CurrentSelectedActor = CurrentSelectedActors[0];
@@ -178,12 +178,12 @@ void ARTSHUD::BoxSelect()
 	for (auto Actor : CurrentSelectedActors)
 		OnRTSSelectionDeselected.Broadcast(Actor);
 	CurrentSelectedActors.Empty();
-	UE_LOG(RTSLog, Display, TEXT("BoxSelect Actor Count %d"), CurrentHoveredActors.Num());
+	UE_LOG(LogRTS, Display, TEXT("BoxSelect Actor Count %d"), CurrentHoveredActors.Num());
 	for (auto Actor : CurrentHoveredActors)
 	{
 		CurrentSelectedActors.Add(Actor);
 		OnRTSSelectionSelected.Broadcast(Actor);
-		UE_LOG(RTSLog, Display, TEXT("BoxSelect Actor %s"), *Actor->GetName());
+		UE_LOG(LogRTS, Display, TEXT("BoxSelect Actor %s"), *Actor->GetName());
 	}
 	if (CurrentSelectedActors.IsValidIndex(0))
 		CurrentSelectedActor = CurrentSelectedActors[0];
@@ -201,7 +201,7 @@ void ARTSHUD::StartSelectionRectangle()
 
 void ARTSHUD::FinishSelectionRectangle()
 {
-	//UE_LOG(RTSLog, Display, TEXT("FinishSelectionRectangle"));
+	//UE_LOG(LogRTS, Display, TEXT("FinishSelectionRectangle"));
 	bSelectionUpdate = false;
 	if(RTSPlayerController->GetMousePosition(SelectionRectangleEnd.X, SelectionRectangleEnd.Y))
 	{

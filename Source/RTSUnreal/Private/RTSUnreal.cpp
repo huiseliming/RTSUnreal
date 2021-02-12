@@ -4,4 +4,4 @@
 #include "Modules/ModuleManager.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, RTSUnreal, "RTSUnreal" );
-DEFINE_LOG_CATEGORY(RTSLog);
+DEFINE_LOG_CATEGORY(LogRTS);

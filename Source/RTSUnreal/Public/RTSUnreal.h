@@ -4,5 +4,5 @@
 
 #include "CoreMinimal.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(RTSLog, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogRTS, Log, All);
 
