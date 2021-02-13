@@ -3,18 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "RTSGameMode.generated.h"
+#include "GameFramework/Info.h"
+#include "RTSTeamInfo.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class RTSUNREAL_API ARTSGameMode : public AGameModeBase
+class RTSUNREAL_API ARTSTeamInfo : public AInfo
 {
 	GENERATED_BODY()
-	ARTSGameMode();
-
-	
 	
 };

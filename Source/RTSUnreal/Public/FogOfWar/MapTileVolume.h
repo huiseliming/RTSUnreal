@@ -3,18 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "RTSGameMode.generated.h"
+#include "GameFramework/Volume.h"
+#include "MapTileVolume.generated.h"
+
 
 /**
  * 
  */
 UCLASS()
-class RTSUNREAL_API ARTSGameMode : public AGameModeBase
+class RTSUNREAL_API AMapTileVolume : public AVolume
 {
 	GENERATED_BODY()
-	ARTSGameMode();
-
-	
 	
 };
