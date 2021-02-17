@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Actor.h"
 #include "FogOfWar.generated.h"
 
 class APostProcessVolume;
-class AMapTileVolume;
+class ARTSWorldTileVolume;
 
 USTRUCT()
-struct RTSUNREAL_API FMapTile
+struct RTSUNREAL_API FWorldTiles
 {
 	GENERATED_BODY()
 
@@ -38,19 +39,31 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Initialize(AMapTileVolume* InMapTileVolume);
-
+	void Initialize(ARTSWorldTileVolume* InRTSWorldTileVolume);
 
 	UPROPERTY(EditInstanceOnly, Category="RTS|FogOfWar")
 	APostProcessVolume* FogOfWarPostProcessVolume;
+
+	// Material for rendering the fog of war effect
+	UPROPERTY(EditInstanceOnly, Category = "RTS")
+	UMaterialInterface* FogOfWarMaterial;
 	
 	UPROPERTY()
-	AMapTileVolume* MapTileVolume;
+	ARTSWorldTileVolume* RTSWorldTileVolume;
 
 	UPROPERTY()
 	UTexture2D* FogOfWarTexture;
 
+	uint8* FogOfWarTextureBuffer;
+	
+	/** Update region for updating the contents of the fog of war texture. */
+	FUpdateTextureRegion2D* FogOfWarUpdateTextureRegion;
+
+	/** Post-process material instance for rendering fog of war in 3D space. */
 	UPROPERTY()
-	TArray<FMapTile> MapTiles;
+	UMaterialInstanceDynamic* FogOfWarMaterialInstance;
+	
+	UPROPERTY()
+	TArray<FWorldTiles> WorldTiles;
 
 };
