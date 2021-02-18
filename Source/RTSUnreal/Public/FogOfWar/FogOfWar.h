@@ -22,11 +22,25 @@ struct RTSUNREAL_API FWorldTiles
 	int32 ActorNumber;
 };
 
+class UFogOfWarAgentComponent;
+
+USTRUCT()
+struct RTSUNREAL_API FFogOfWarAgent
+{
+	GENERATED_BODY()
+	
+	UPROPERTY()
+	AActor* Actor;
+	
+	UPROPERTY()
+	UFogOfWarAgentComponent* FogOfWarAgentComponent;
+	
+};
+
 UCLASS()
 class RTSUNREAL_API AFogOfWar : public AActor
 {
 	GENERATED_BODY()
-	
 public:	
 	// Sets default values for this actor's properties
 	AFogOfWar();
@@ -39,6 +53,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	
 	void Initialize(ARTSWorldTileVolume* InRTSWorldTileVolume);
 
 	UPROPERTY(EditInstanceOnly, Category="RTS|FogOfWar")
@@ -65,5 +81,14 @@ public:
 	
 	UPROPERTY()
 	TArray<FWorldTiles> WorldTiles;
+		
+	UFUNCTION(BlueprintPure, Category = "RTS|FogOfWar")
+    static AFogOfWar* GetFogOfWar();
+	
+private:
+	TSet<FFogOfWarAgent> Agents;
 
+	bool RegisterAgent(UFogOfWarAgentComponent* FogOfWarAgentComponent);
+	bool DeregisterAgent(UFogOfWarAgentComponent* FogOfWarAgentComponent);
+	
 };

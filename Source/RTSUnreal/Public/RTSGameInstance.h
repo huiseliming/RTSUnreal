@@ -6,6 +6,9 @@
 #include "Engine/GameInstance.h"
 #include "RTSGameInstance.generated.h"
 
+
+class AFogOfWar;
+
 /**
  * 
  */
@@ -13,5 +16,10 @@ UCLASS()
 class RTSUNREAL_API URTSGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-	
+
+public:
+	AFogOfWar* GetFogOfWar();
+	void SetFogOfWar(AFogOfWar* FogOfWar);
+private:
+	AFogOfWar* FogOfWar = nullptr; 
 };

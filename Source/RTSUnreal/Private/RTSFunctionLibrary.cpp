@@ -3,6 +3,7 @@
 
 #include "RTSFunctionLibrary.h"
 #include "RTSCollisionChannel.h"
+#include "RTSGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 // FVector URTSFunctionLibrary::GetCursorWorldPlacement(UObject* WorldContextObject, APlayerController* PlayerController, float Distance)

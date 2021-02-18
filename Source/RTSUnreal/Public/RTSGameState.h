@@ -29,4 +29,6 @@ protected:
 	float GameTimeSeconds = 0.0f;
 	UPROPERTY(BlueprintReadOnly, Category="RTSGameState")
 	int GameDay = 0;
+
+	
 };

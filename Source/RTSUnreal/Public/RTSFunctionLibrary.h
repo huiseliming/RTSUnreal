@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "FogOfWar/FogOfWar.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RTSFunctionLibrary.generated.h"
 
@@ -17,11 +19,13 @@ UCLASS()
 class RTSUNREAL_API URTSFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
+
+	
 public:
 	
 	UFUNCTION(BlueprintPure, Category = "RTS|FunctionLibrary", meta = (WorldContext = WorldContextObject))
 	static AActor* LineTraceSingleForSelection(UObject* WorldContextObject, APlayerController* PlayerController, float Distance);
-
+	
 	//UFUNCTION(BlueprintCallable, Category = "RTSFunctionLibrary", meta = (WorldContext = WorldContextObject))
 	//static FVector GetCursorWorldPlacement(UObject* WorldContextObject, APlayerController* PlayerController, float Distance);
 	

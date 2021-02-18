@@ -14,7 +14,5 @@ class RTSUNREAL_API ARTSGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	ARTSGameMode();
-
-	
 	
 };

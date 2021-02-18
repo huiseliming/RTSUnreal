@@ -2,9 +2,13 @@
 
 
 #include "FogOfWar/FogOfWar.h"
+
+#include "RTSGameInstance.h"
 #include "FogOfWar/RTSWorldTileVolume.h"
 #include "Engine/PostProcessVolume.h"
 #include "RTSUnreal.h"
+#include "FogOfWar/FogOfWarAgentComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFogOfWar::AFogOfWar()
@@ -18,13 +22,21 @@ AFogOfWar::AFogOfWar()
 void AFogOfWar::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	URTSGameInstance* RTSGameInstance = Cast<URTSGameInstance>(GetGameInstance());
+	if (!RTSGameInstance)
+		UE_LOG(LogRTS, Fatal, TEXT(" GameInstance not is RTSGameInstance or subclass"));
+	RTSGameInstance->SetFogOfWar(this);
 }
 
 // Called every frame
 void AFogOfWar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	// Update Agent Visible
+	for (auto& Agent : Agents)
+	{
+		// TODO : CALC Agent visible
+	}
 	// Update texture.
 	if (!RTSWorldTileVolume || !FogOfWarMaterial)
 	{
@@ -109,3 +121,23 @@ void AFogOfWar::Initialize(ARTSWorldTileVolume* InRTSWorldTileVolume)
 	
 }
 
+bool AFogOfWar::RegisterAgent(UFogOfWarAgentComponent* FogOfWarAgentComponent)
+{
+	Agents.Add(FFogOfWarAgent{FogOfWarAgentComponent->GetOwner(),FogOfWarAgentComponent});
+	return true;
+}
+
+bool AFogOfWar::DeregisterAgent(UFogOfWarAgentComponent* FogOfWarAgentComponent)
+{
+	return 0 != Agents.Remove(FFogOfWarAgent{FogOfWarAgentComponent->GetOwner(),FogOfWarAgentComponent});
+}
+
+AFogOfWar* AFogOfWar::GetFogOfWar()
+{
+	URTSGameInstance* RTSGameInstance = Cast<URTSGameInstance>(UGameplayStatics::GetGameInstance(GWorld));
+	if (RTSGameInstance)
+	{
+		return RTSGameInstance->GetFogOfWar();
+	}
+	return nullptr;
+}
