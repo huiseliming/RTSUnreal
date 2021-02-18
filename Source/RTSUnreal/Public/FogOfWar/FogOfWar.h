@@ -9,7 +9,6 @@
 
 class APostProcessVolume;
 class ARTSWorldTileVolume;
-
 USTRUCT()
 struct RTSUNREAL_API FWorldTiles
 {
@@ -35,7 +34,19 @@ struct RTSUNREAL_API FFogOfWarAgent
 	UPROPERTY()
 	UFogOfWarAgentComponent* FogOfWarAgentComponent;
 	
+	bool operator==(const FFogOfWarAgent& Other) const
+	{
+		return Equals(Other);
+	}
+
+	bool Equals(const FFogOfWarAgent& Other) const
+	{
+		return Actor == Other.Actor && FogOfWarAgentComponent == Other.FogOfWarAgentComponent;
+	}
+
 };
+
+uint32 GetTypeHash(const FFogOfWarAgent& Thing);
 
 UCLASS()
 class RTSUNREAL_API AFogOfWar : public AActor
@@ -55,17 +66,20 @@ public:
 
 public:
 	
-	void Initialize(ARTSWorldTileVolume* InRTSWorldTileVolume);
+	void Initialize();
 
+	
+	
 	UPROPERTY(EditInstanceOnly, Category="RTS|FogOfWar")
 	APostProcessVolume* FogOfWarPostProcessVolume;
-
-	// Material for rendering the fog of war effect
-	UPROPERTY(EditInstanceOnly, Category = "RTS")
-	UMaterialInterface* FogOfWarMaterial;
 	
 	UPROPERTY()
 	ARTSWorldTileVolume* RTSWorldTileVolume;
+
+	
+	// Material for rendering the fog of war effect
+	UPROPERTY(EditInstanceOnly, Category = "RTS")
+	UMaterialInterface* FogOfWarMaterial;
 
 	UPROPERTY()
 	UTexture2D* FogOfWarTexture;
@@ -87,7 +101,7 @@ public:
 	
 private:
 	TSet<FFogOfWarAgent> Agents;
-
+public:
 	bool RegisterAgent(UFogOfWarAgentComponent* FogOfWarAgentComponent);
 	bool DeregisterAgent(UFogOfWarAgentComponent* FogOfWarAgentComponent);
 	

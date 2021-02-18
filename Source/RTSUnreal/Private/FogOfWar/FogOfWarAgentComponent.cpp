@@ -36,12 +36,11 @@ void UFogOfWarAgentComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 void UFogOfWarAgentComponent::Activate(bool bReset)
 {
-	Register()
-	AFogOfWar::GetFogOfWar()->RE
+	AFogOfWar::GetFogOfWar()->RegisterAgent(this);
 }
 
 void UFogOfWarAgentComponent::Deactivate()
 {
-	
+	AFogOfWar::GetFogOfWar()->DeregisterAgent(this);
 }
 

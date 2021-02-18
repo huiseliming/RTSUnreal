@@ -19,7 +19,9 @@ class RTSUNREAL_API URTSGameInstance : public UGameInstance
 
 public:
 	AFogOfWar* GetFogOfWar();
-	void SetFogOfWar(AFogOfWar* FogOfWar);
+	void SetFogOfWar(AFogOfWar* InFogOfWar);
 private:
+
+	UPROPERTY()
 	AFogOfWar* FogOfWar = nullptr; 
 };

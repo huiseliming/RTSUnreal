@@ -8,8 +8,8 @@ AFogOfWar* URTSGameInstance::GetFogOfWar()
 	return FogOfWar;
 }
 
-void URTSGameInstance::SetFogOfWar(AFogOfWar* FogOfWar)
+void URTSGameInstance::SetFogOfWar(AFogOfWar* InFogOfWar)
 {
-	this->FogOfWar = FogOfWar;
+	this->FogOfWar = InFogOfWar;
 }
 

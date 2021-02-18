@@ -36,7 +36,7 @@ private:
 	TArray<int32> VisibleTiles;
 	
 	// SightRadius Unreal Unit(cm)
-	UPROPERTY(EditDefaultsOnly, Category="RTS|FogOfWarAgentComponent", mate = (ClampMin=0))
+	UPROPERTY(EditDefaultsOnly, Category="RTS|FogOfWarAgentComponent")
 	float SightRadius = 500.f;
 
 	UPROPERTY(EditDefaultsOnly, Category="RTS")

@@ -22,7 +22,8 @@ protected:
 	// Set reasonable default values.
 	
 public:
-	
+	void Initialize();
+
 	int32 WorldLocationToTileIndex(float InWorldLocationX, float InWorldLocationY)
 	{
 		FVector WorldLocation(InWorldLocationX,InWorldLocationY,0.f);
@@ -52,17 +53,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = "RTS", meta = (ClampMin = 0))
 	float LevelHeight = 100;
 	
+	// Size of a single tile.
+	UPROPERTY(EditAnywhere, Category="RTS")
+	float TileWorldSize = 50.f;
+
 	// Width and height of the grid map tile.
 	int32 GridTileNumber;
 	
 	// Size of the volume.
 	FVector GridWorldSize;
 	
-	// Size of a single tile.
-	float TileWorldSize;
-	
 	//  Cached locations of all grid tiles.
 	TArray<FVector2D> TileWorldLocations;
+	
 	//  Cached height of all grid tiles.
 	TArray<float> TileHeights;
 	

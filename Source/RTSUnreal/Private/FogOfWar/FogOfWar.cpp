@@ -10,6 +10,12 @@
 #include "FogOfWar/FogOfWarAgentComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+uint32 GetTypeHash(const FFogOfWarAgent& Thing)
+{
+	uint32 Hash = FCrc::MemCrc32(&Thing, sizeof(FFogOfWarAgent));
+	return Hash;
+}
+
 // Sets default values
 AFogOfWar::AFogOfWar()
 {
@@ -22,10 +28,12 @@ AFogOfWar::AFogOfWar()
 void AFogOfWar::BeginPlay()
 {
 	Super::BeginPlay();
+	Initialize();
 	URTSGameInstance* RTSGameInstance = Cast<URTSGameInstance>(GetGameInstance());
 	if (!RTSGameInstance)
 		UE_LOG(LogRTS, Fatal, TEXT(" GameInstance not is RTSGameInstance or subclass"));
 	RTSGameInstance->SetFogOfWar(this);
+	
 }
 
 // Called every frame
@@ -38,18 +46,18 @@ void AFogOfWar::Tick(float DeltaTime)
 		// TODO : CALC Agent visible
 	}
 	// Update texture.
-	if (!RTSWorldTileVolume || !FogOfWarMaterial)
+	if (RTSWorldTileVolume == nullptr || FogOfWarMaterial == nullptr)
 	{
 		return;
 	}
 
-	int32 SizeInTiles = RTSWorldTileVolume->GridTileNumber;
+	int32 GridTileNumber = RTSWorldTileVolume->GridTileNumber;
 
-	for (int32 Y = 0; Y < SizeInTiles; ++Y)
+	for (int32 Y = 0; Y < GridTileNumber; ++Y)
 	{
-		for (int32 X = 0; X < SizeInTiles; ++X)
+		for (int32 X = 0; X < GridTileNumber; ++X)
 		{
-			const int i = Y * SizeInTiles + X;
+			const int i = Y * GridTileNumber + X;
 
 			const int iBlue = i * 4 + 0;
 			const int iGreen = i * 4 + 1;
@@ -82,17 +90,20 @@ void AFogOfWar::Tick(float DeltaTime)
 		}
 	}
 
-	FogOfWarTexture->UpdateTextureRegions(0, 1, FogOfWarUpdateTextureRegion, SizeInTiles * 4, 4, FogOfWarTextureBuffer);
+	FogOfWarTexture->UpdateTextureRegions(0, 1, FogOfWarUpdateTextureRegion, GridTileNumber * 4, 4, FogOfWarTextureBuffer);
 }
 
-void AFogOfWar::Initialize(ARTSWorldTileVolume* InRTSWorldTileVolume)
+void AFogOfWar::Initialize()
 {
-	RTSWorldTileVolume = InRTSWorldTileVolume;
-
-	if(!RTSWorldTileVolume)
+	AActor* Actor = UGameplayStatics::GetActorOfClass(GWorld,ARTSWorldTileVolume::StaticClass());
+	RTSWorldTileVolume = Cast<ARTSWorldTileVolume>(Actor);
+	
+	if(RTSWorldTileVolume == nullptr)
 	{
 		UE_LOG(LogRTS, Fatal, TEXT("No Find RTSWorldTileVolume Can't Initialize"));
 	}
+	
+	RTSWorldTileVolume->Initialize();
 	
 	if(!FogOfWarPostProcessVolume)
 	{
@@ -100,25 +111,47 @@ void AFogOfWar::Initialize(ARTSWorldTileVolume* InRTSWorldTileVolume)
 	}
 	
 	// Setup fog of war buffer.
-	const int32 TilesSize = RTSWorldTileVolume->GridTileNumber;
+	const int32 GridTileNumber = RTSWorldTileVolume->GridTileNumber;
 	const FVector RTSWorldSize = RTSWorldTileVolume->GridWorldSize;
-	check(TilesSize == TilesSize);
-	FogOfWarTextureBuffer = new uint8[TilesSize * TilesSize * 4];
 	
-	FogOfWarTexture = UTexture2D::CreateTransient(TilesSize, TilesSize);
+	FogOfWarTextureBuffer = new uint8[GridTileNumber * GridTileNumber * 4];
+	
+	for (int32 Y = 0; Y < GridTileNumber; ++Y)
+	{
+		for (int32 X = 0; X < GridTileNumber; ++X)
+		{
+			const int i = Y * GridTileNumber + X;
+
+			const int iBlue = i * 4 + 0;
+			const int iGreen = i * 4 + 1;
+			const int iRed = i * 4 + 2;
+			const int iAlpha = i * 4 + 3;
+
+			FogOfWarTextureBuffer[iBlue] = 0;
+			FogOfWarTextureBuffer[iGreen] = 0;
+			FogOfWarTextureBuffer[iRed] = 0;
+			FogOfWarTextureBuffer[iAlpha] = 0;
+		}
+	}
+
+	
+	
+	FogOfWarTexture = UTexture2D::CreateTransient(GridTileNumber, GridTileNumber);
 	FogOfWarTexture->AddToRoot();
 	FogOfWarTexture->UpdateResource();
-	FogOfWarUpdateTextureRegion = new FUpdateTextureRegion2D(0, 0, 0, 0, TilesSize, TilesSize);
-
+	FogOfWarUpdateTextureRegion = new FUpdateTextureRegion2D(0, 0, 0, 0, GridTileNumber, GridTileNumber);
+	
 	// Setup fog of war material.
 	FogOfWarMaterialInstance = UMaterialInstanceDynamic::Create(FogOfWarMaterial, nullptr);
-	FogOfWarMaterialInstance->SetTextureParameterValue(FName("VisibilityMask"), FogOfWarTexture);
+	FogOfWarMaterialInstance->SetTextureParameterValue(FName("FogOfWarRenderTarget"), FogOfWarTexture);
 	FogOfWarMaterialInstance->SetScalarParameterValue(FName("OneOverWorldSize"), 1.0f / RTSWorldSize.X);
-	FogOfWarMaterialInstance->SetScalarParameterValue(FName("OneOverTileSize"), 1.0f / TilesSize);
+	FogOfWarMaterialInstance->SetScalarParameterValue(FName("WorldXYSize"), RTSWorldSize.X);
+	FogOfWarMaterialInstance->SetScalarParameterValue(FName("WorldZSize"), 3000);
+	FogOfWarMaterialInstance->SetScalarParameterValue(FName("OneOverTileSize"), 1.0f / GridTileNumber);
+	
 	
 	// Setup fog of war post-process volume.
 	FogOfWarPostProcessVolume->AddOrUpdateBlendable(FogOfWarMaterialInstance);
-	
 }
 
 bool AFogOfWar::RegisterAgent(UFogOfWarAgentComponent* FogOfWarAgentComponent)
