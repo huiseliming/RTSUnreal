@@ -23,7 +23,16 @@ protected:
 	
 public:
 	void Initialize();
-
+	
+	FIntVector WorldLocationToTileXYZ(FVector InWorldLocation)
+	{
+		FVector WorldLocation(InWorldLocation.X,InWorldLocation.Y,0.f);
+		FVector RTSWorldOriToWorldLocation = WorldLocation - (GetActorLocation() - FVector(GridTileNumber / 2 * TileWorldSize));
+		int32 X = FMath::Floor(RTSWorldOriToWorldLocation.X / TileWorldSize);
+		int32 Y = FMath::Floor(RTSWorldOriToWorldLocation.Y / TileWorldSize);
+		return FIntVector(X,Y,TileHeights[Y * GridTileNumber + X]);
+	}
+	
 	int32 WorldLocationToTileIndex(float InWorldLocationX, float InWorldLocationY)
 	{
 		FVector WorldLocation(InWorldLocationX,InWorldLocationY,0.f);

@@ -43,6 +43,58 @@ void AFogOfWar::Tick(float DeltaTime)
 	// Update Agent Visible
 	for (auto& Agent : Agents)
 	{
+		float SightRadius = Agent.FogOfWarAgentComponent->GetSightRadius();
+		FIntVector ActorLocationTileXYZ = RTSWorldTileVolume->WorldLocationToTileXYZ(Agent.Actor->GetActorLocation());
+		if (Agent.ActorLocationTileXYZ.X == ActorLocationTileXYZ.X &&
+			Agent.ActorLocationTileXYZ.Y == ActorLocationTileXYZ.Y &&
+			Agent.ActorLocationTileXYZ.Z == ActorLocationTileXYZ.Z)
+		{
+			continue;
+		}
+		// Moved to new grid cell.
+		Agent.ActorLocationTileXYZ = ActorLocationTileXYZ;
+
+		int32 TileX;
+		int32 TileY;
+		int32 RadiusXSqr;
+		int32 RadiusYSqr;
+		int32 LocalTileX;
+		int32 LocalTileY;
+		
+		int32 ActorSightRadiusTile = FMath::FloorToInt(SightRadius / RTSWorldTileVolume->TileWorldSize);
+		int32 ActorSightRadiusTileSqr = ActorSightRadiusTile * ActorSightRadiusTile;
+
+
+
+		for (int32 RadiusY = -ActorSightRadiusTile; RadiusY <= ActorSightRadiusTile; RadiusY++)
+		{
+			TileY = ActorLocationTileXYZ.Y + RadiusY;
+			RadiusYSqr = RadiusY * RadiusY;
+			LocalTileY = RadiusY + ActorSightRadiusTile;
+
+			if (TileY >= 0 && TileY < RTSWorldTileVolume->GridTileNumber)
+			{
+				for (int32 RadiusX = -ActorSightRadiusTile; RadiusX <= ActorSightRadiusTile; RadiusX++)
+				{
+					TileX = ActorLocationTileXYZ.X + RadiusX;
+					RadiusXSqr = RadiusX * RadiusX;
+					LocalTileX = RadiusX + ActorSightRadiusTile;
+
+					// Check if within circle.
+					if (TileX >= 0 && TileX < RTSWorldTileVolume->GridTileNumber && (RadiusXSqr + RadiusYSqr <= ActorSightRadiusTileSqr))
+					{
+						if (Agent.FogOfWarAgentComponent->IsIgnoresHeightLevels()
+                            //|| HasLocalVisionAt(LocalTileX, LocalTileY, ActorSightRadiusTile, TileX, TileY,
+                            //    ActorLocationTile.X, ActorLocationTile.Y, ActorLocationHeightLevel)
+                                )
+						{
+							WorldTiles[RTSWorldTileVolume->TileXYToTileIndex(TileX, TileY)].AddActor(Agent.Actor);
+						}
+					}
+				}
+			}
+		}
+
 		// TODO : CALC Agent visible
 	}
 	// Update texture.
@@ -64,6 +116,14 @@ void AFogOfWar::Tick(float DeltaTime)
 			const int iRed = i * 4 + 2;
 			const int iAlpha = i * 4 + 3;
 
+			if(WorldTiles[X + GridTileNumber * Y].IsVisible())
+			{
+				FogOfWarTextureBuffer[iBlue] = 0;
+				FogOfWarTextureBuffer[iGreen] = 0;
+				FogOfWarTextureBuffer[iRed] = 255;
+				FogOfWarTextureBuffer[iAlpha] = 0;
+			}
+			
 			// switch (VisionInfo->GetVision(X, Y))
 			// {
 			// case ERTSVisionState::VISION_Visible:
@@ -134,7 +194,7 @@ void AFogOfWar::Initialize()
 		}
 	}
 
-	
+	WorldTiles.Init(FWorldTiles{0},GridTileNumber * GridTileNumber);
 	
 	FogOfWarTexture = UTexture2D::CreateTransient(GridTileNumber, GridTileNumber);
 	FogOfWarTexture->AddToRoot();

@@ -33,6 +33,8 @@ struct RTSUNREAL_API FFogOfWarAgent
 	
 	UPROPERTY()
 	UFogOfWarAgentComponent* FogOfWarAgentComponent;
+
+	FIntVector ActorLocationTileXYZ;
 	
 	bool operator==(const FFogOfWarAgent& Other) const
 	{
