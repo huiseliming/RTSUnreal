@@ -10,6 +10,6 @@ public class RTSUnrealEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 
-		ExtraModuleNames.AddRange( new string[] { "RTSUnreal" } );
+		ExtraModuleNames.AddRange( new string[] { "RTSUnreal", "RTSUnrealEditor" } );
 	}
 }

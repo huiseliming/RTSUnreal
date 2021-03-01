@@ -11,6 +11,11 @@
 			"AdditionalDependencies": [
 				"Engine"
 			]
+		},
+		{
+			"Name": "RTSUnrealEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PreDefault"
 		}
 	]
 }
