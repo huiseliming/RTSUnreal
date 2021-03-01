@@ -6,22 +6,20 @@
 
 void FRTSUnrealModule::StartupModule()
 {
-	FWorldDelegates::OnPostWorldCleanup.AddLambda([this](UWorld* World, bool bSessionEnded, bool bCleanupResources) {
-		auto FogOfWarManager = FogOfWarManagerMap.FindRef(World);
-		FogOfWarManager->RemoveFromRoot();
+	FogOfWarManagerDelegateHandles.Add(FWorldDelegates::OnPostWorldCleanup.AddLambda([this](UWorld* World, bool bSessionEnded, bool bCleanupResources) {
 	    FogOfWarManagerMap.Remove(World);
-	    UE_LOG(LogRTS, Log, TEXT("[%s] Fog Controller is removed for: %s"), *RTS_FUNC_LINE, *World->GetName());
-	});
+	    UE_LOG(LogRTS, Log, TEXT("[%s] FogOfWarManager is removed for: %s"), *RTS_FUNC_LINE, *World->GetName());
+	}));
 	
-	FWorldDelegates::OnPostWorldInitialization.AddLambda([this](UWorld* World, const UWorld::InitializationValues IVS) {
+	FogOfWarManagerDelegateHandles.Add(FWorldDelegates::OnPostWorldInitialization.AddLambda([this](UWorld* World, const UWorld::InitializationValues IVS) {
         auto FogController = NewObject<UFogOfWarManager>(GetTransientPackage());
         FogController->SetFlags(RF_Standalone);
         FogController->AddToRoot();
 
         FogOfWarManagerMap.Add(World, FogController);
 
-        UE_LOG(LogRTS, Log, TEXT("[%s] Fog Controller is created for: %s"), *RTS_FUNC_LINE, *World->GetName());
-    });
+        UE_LOG(LogRTS, Log, TEXT("[%s] FogOfWarManager is created for: %s"), *RTS_FUNC_LINE, *World->GetName());
+    }));
 	
 	UE_LOG(LogRTS, Log, TEXT("RTSUnrealModule Loaded"));
 }

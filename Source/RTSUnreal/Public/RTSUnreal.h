@@ -9,10 +9,10 @@
 
 #define RTSUNREAL_AS_PRIMARY_GAME_MODULE
 
-
-#define RTS_FUNC (FString(__FUNCTION__))              // Current Class Name + Function Name where this is called
-#define RTS_LINE (FString::FromInt(__LINE__))         // Current Line Number in the code where this is called
-#define RTS_FUNC_LINE (RTS_FUNC + "(" + RTS_LINE + ")") // Current Class and Line Number where this is called!
+// Helper for display code file and line 
+#define RTS_FUNC (FString(__FUNCTION__))
+#define RTS_LINE (FString::FromInt(__LINE__))
+#define RTS_FUNC_LINE (RTS_FUNC + "(" + RTS_LINE + ")")
 
 
 
