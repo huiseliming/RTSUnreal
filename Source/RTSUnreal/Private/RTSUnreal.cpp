@@ -12,7 +12,8 @@ void FRTSUnrealModule::StartupModule()
 	}));
 	
 	FogOfWarManagerDelegateHandles.Add(FWorldDelegates::OnPostWorldInitialization.AddLambda([this](UWorld* World, const UWorld::InitializationValues IVS) {
-        auto FogOfWarManager = NewObject<UFogOfWarManager>(World, *(World->GetName() + TEXT("FogOfWarManager")), RF_Standalone);
+		// Passing an UWorld pointer as Outer in NewObject() and a flag RF_Standalone - is enough to keep your UObject alive during gameplay and auto destruction on game end.
+		UFogOfWarManager* FogOfWarManager = NewObject<UFogOfWarManager>(World, *(World->GetName() + TEXT("FogOfWarManager")), RF_Standalone);
         FogOfWarManagerMap.Add(World, FogOfWarManager);
 
         UE_LOG(LogRTS, Log, TEXT("[%s] FogOfWarManager is created for: %s"), *RTS_FUNC_LINE, *World->GetName());
