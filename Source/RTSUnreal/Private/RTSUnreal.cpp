@@ -12,11 +12,8 @@ void FRTSUnrealModule::StartupModule()
 	}));
 	
 	FogOfWarManagerDelegateHandles.Add(FWorldDelegates::OnPostWorldInitialization.AddLambda([this](UWorld* World, const UWorld::InitializationValues IVS) {
-        auto FogController = NewObject<UFogOfWarManager>(GetTransientPackage());
-        FogController->SetFlags(RF_Standalone);
-        FogController->AddToRoot();
-
-        FogOfWarManagerMap.Add(World, FogController);
+        auto FogOfWarManager = NewObject<UFogOfWarManager>(World, *(World->GetName() + TEXT("FogOfWarManager")), RF_Standalone);
+        FogOfWarManagerMap.Add(World, FogOfWarManager);
 
         UE_LOG(LogRTS, Log, TEXT("[%s] FogOfWarManager is created for: %s"), *RTS_FUNC_LINE, *World->GetName());
     }));
@@ -31,10 +28,6 @@ void FRTSUnrealModule::ShutdownModule()
 	for(auto& DelegateHandle: FogOfWarManagerDelegateHandles)
 		DelegateHandle.Reset();
 	
-	for (auto FogOfWarManager : FogOfWarManagerMap)
-	{
-		FogOfWarManager.Value->RemoveFromRoot();
-	}
 	FogOfWarManagerMap.Empty();
 }
 
