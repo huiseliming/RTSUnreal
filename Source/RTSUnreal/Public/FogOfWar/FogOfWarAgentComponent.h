@@ -28,18 +28,31 @@ public:
 	virtual void Deactivate() override;
 	
 public:
-	float GetSightRadius() const { return SightRadius; }
+	float GetSightRadius() const { return VisionRadius; }
 	bool IsIgnoresHeightLevels() const { return bIgnoreHeight; }
 
 private:
 
 	TArray<int32> VisibleTiles;
-	
-	// SightRadius Unreal Unit(cm)
-	UPROPERTY(EditDefaultsOnly, Category="RTS|FogOfWarAgentComponent")
-	float SightRadius = 500.f;
 
-	UPROPERTY(EditDefaultsOnly, Category="RTS")
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "RTS|FogOfWarAgentComponent")
+	bool bAgentEnabled;
+	
+	// VisionRadius Unreal Unit(cm)
+	UPROPERTY(EditDefaultsOnly, Category="RTS|FogOfWarAgentComponent")
+	float VisionRadius = 500.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "RTS|FogOfWarAgentComponent")
+	int32 HeightLevel;
+	
+	UPROPERTY(EditDefaultsOnly, Category="RTS|FogOfWarAgentComponent")
 	bool bIgnoreHeight = false;
 
+
+
+
+
+	
 };

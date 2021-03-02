@@ -8,6 +8,8 @@
 #include "UObject/Object.h"
 #include "FogOfWarManager.generated.h"
 
+class AFogOfWarInfo;
+
 /**
  * 
  */
@@ -20,5 +22,10 @@ public:
 	// Get FogOfWarManager in current world
 	static UFogOfWarManager* Get(const UObject* WorldContextObject, EGetWorldErrorMode ErrorMode = EGetWorldErrorMode::Assert);
 
+	void RegisterFogOfWarInfo(AFogOfWarInfo* FogOfWarInfo);
+	void DeregisterFogOfWarInfo(AFogOfWarInfo* FogOfWarInfo);
 	
+	AFogOfWarInfo* GetFogOfWarInfo(int32 Index,FString Name) const;
+	
+	TArray<TWeakObjectPtr<AFogOfWarInfo>> FogOfWarInfos;
 };
