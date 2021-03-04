@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FogOfWarDissolveStrategy.h"
 #include "Components/SceneComponent.h"
 #include "FogOfWarAgentComponent.generated.h"
 
+class IFogOfWarDissolveStrategy;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RTSUNREAL_API UFogOfWarAgentComponent : public USceneComponent
@@ -51,8 +53,7 @@ public:
 	bool bIgnoreHeight = false;
 
 
+	UPROPERTY(EditDefaultsOnly, Category="RTS|FogOfWarAgentComponent")
+	EFogOfWarDissolveStrategy FogOfWarDissolveStrategy;
 
-
-
-	
 };

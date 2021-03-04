@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FogOfWarDissolveStrategy.h"
+
 #include "GameFramework/Info.h"
 #include "FogOfWarInfo.generated.h"
 
@@ -41,11 +43,7 @@ public:
 	FFogOfWarInfoAgentModifySignature OnRemoveAgent;
 	
 
-	
-	
-	
-	
-	
+	TArray<IFogOfWarDissolveStrategy> DissolveStrategies;
 	
 	// Registered FogOfWar agents
 	UPROPERTY(EditAnywhere, Category = "FogOfWarInfo")
