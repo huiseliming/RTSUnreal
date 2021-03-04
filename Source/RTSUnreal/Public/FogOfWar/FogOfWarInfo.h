@@ -6,9 +6,10 @@
 #include "GameFramework/Info.h"
 #include "FogOfWarInfo.generated.h"
 
-
-
 class UFogOfWarAgentComponent;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFogOfWarInfoAgentModifySignature, UFogOfWarAgentComponent* ,InAgent);
+
 /**
  * 
  */
@@ -25,6 +26,26 @@ public:
 protected:
 	virtual void Initialize();
 	virtual void Cleanup();
+	
+public:
+	virtual void Tick(float DeltaTime) override;
+
+	/** Update whole layer state */
+	virtual void UpdateLayer(bool bForceFullUpdate = false);
+	
+public:
+	void AddAgent(UFogOfWarAgentComponent* InAgent);
+	void RemoveAgent(UFogOfWarAgentComponent* InAgent);
+	
+	FFogOfWarInfoAgentModifySignature OnAddAgent;
+	FFogOfWarInfoAgentModifySignature OnRemoveAgent;
+	
+
+	
+	
+	
+	
+	
 	
 	// Registered FogOfWar agents
 	UPROPERTY(EditAnywhere, Category = "FogOfWarInfo")

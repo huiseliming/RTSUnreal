@@ -10,13 +10,11 @@
 #define RTSUNREAL_AS_PRIMARY_GAME_MODULE
 
 // Helper for display code file and line 
-#define RTS_FUNC (FString(__FUNCTION__))
-#define RTS_LINE (FString::FromInt(__LINE__))
-#define RTS_FUNC_LINE (RTS_FUNC + "(" + RTS_LINE + ")")
+#define UE__FUNCTION__ (FString(__FUNCTION__))
+#define UE__LINE__ (FString::FromInt(__LINE__))
+#define UE__FUNC__LINE__ (UE__FUNCTION__ + "(" + UE__LINE__ + ")")
 
-
-
-
+class UFogOfWarSettings;
 
 // Module
 #ifdef RTSUNREAL_AS_PRIMARY_GAME_MODULE // As PrimaryGameModule 
@@ -46,11 +44,15 @@ public:
 	{
 		return FModuleManager::Get().IsModuleLoaded("RTSUnreal");
 	}
-
-
+	
+	UFogOfWarSettings* GetFogOfWarSettings() const;
+	
 	// FogOfWarManager
 	UFogOfWarManager* GetFogOfWarManager(UWorld* World) const ;
 private:
+	
+	UFogOfWarSettings* FogOfWarSettings;
+	
 	// FogOfWarManager exist one in every world
 	TMap<UWorld*, UFogOfWarManager*> FogOfWarManagerMap;
 	TArray<FDelegateHandle> FogOfWarManagerDelegateHandles;

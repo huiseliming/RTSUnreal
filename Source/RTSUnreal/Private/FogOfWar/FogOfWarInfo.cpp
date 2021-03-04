@@ -27,7 +27,7 @@ void AFogOfWarInfo::Initialize()
 	UFogOfWarManager* FogOfWarManager = UFogOfWarManager::Get(this,EGetWorldErrorMode::LogAndReturnNull);
 	if(!FogOfWarManager)
 	{
-		UE_LOG(LogRTS, Error, TEXT("[%s] Can't get FogOfWarManager in current World"), *RTS_FUNC_LINE);
+		UE_LOG(LogRTS, Error, TEXT("[%s] Can't get FogOfWarManager in current World"), *UE__FUNC__LINE__);
 	}
 	FogOfWarManager->RegisterFogOfWarInfo(this);
 }
@@ -37,7 +37,23 @@ void AFogOfWarInfo::Cleanup()
 	UFogOfWarManager* FogOfWarManager = UFogOfWarManager::Get(this,EGetWorldErrorMode::LogAndReturnNull);
 	if(!FogOfWarManager)
 	{
-		UE_LOG(LogRTS, Error, TEXT("[%s] Can't get FogOfWarManager in current World"), *RTS_FUNC_LINE);
+		UE_LOG(LogRTS, Error, TEXT("[%s] Can't get FogOfWarManager in current World"), *UE__FUNC__LINE__);
 	}
 	FogOfWarManager->DeregisterFogOfWarInfo(this);
+}
+
+void AFogOfWarInfo::Tick(float DeltaTime)
+{
+}
+
+void AFogOfWarInfo::UpdateLayer(bool bForceFullUpdate)
+{
+}
+
+void AFogOfWarInfo::AddAgent(UFogOfWarAgentComponent* InAgent)
+{
+}
+
+void AFogOfWarInfo::RemoveAgent(UFogOfWarAgentComponent* InAgent)
+{
 }
