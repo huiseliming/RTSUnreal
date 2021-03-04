@@ -3,9 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#include <Actor.h>
-
 #include "GameFramework/HUD.h"
 #include "RTSHUD.generated.h"
 
