@@ -19,6 +19,15 @@ public:
 
 	
 	void InitializeWorldBoundsInfo();
+
+
+	//float GetCellExtentSize();
+	int32 GetFogOfWarTextureResolution() const
+	{
+		return FogOfWarTextureResolution;
+	}
+
+	//float GetFogOfWarResolution();
 	
 	// cell size in unreal unit(cm).
 	UPROPERTY(EditDefaultsOnly, Category="RTS")
