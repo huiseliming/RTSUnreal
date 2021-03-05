@@ -73,6 +73,7 @@ void UFogOfWarManager::Initialize()
 	
 	ARTSWorldBoundsVolume* RTSWorldBoundsVolume = WorldBoundsVolumes[0];
 	const int32 FogOfWarTextureResolution = RTSWorldBoundsVolume->GetFogOfWarTextureResolution();
+	FogOfWarResolution = RTSWorldBoundsVolume->GetFogOfWarResolution();
 	check(FMath::IsPowerOfTwo(FogOfWarTextureResolution));
 	const int32 CachedUpscaleTextureResolution = FogOfWarTextureResolution * 4;
 	

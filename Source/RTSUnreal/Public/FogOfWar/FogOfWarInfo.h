@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "FogOfWarDissolveStrategy.h"
 
 #include "GameFramework/Info.h"
@@ -12,6 +13,20 @@ class UFogOfWarAgentComponent;
 class UFogOfWarManager;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFogOfWarInfoAgentModifySignature, UFogOfWarAgentComponent* ,InAgent);
+
+
+USTRUCT()
+struct FFogOfWarCell
+{
+	GENERATED_BODY()
+	FFogOfWarCell()
+	{
+		VisionNum = 0;
+	}
+	void AddVision(){ VisionNum++;}
+	void RemoveVision(){ VisionNum--;}
+	int32 VisionNum;
+};
 
 /**
  * 
@@ -47,8 +62,11 @@ public:
 	
 	// Registered FogOfWar agents
 	UPROPERTY(EditAnywhere, Category = "FogOfWarInfo")
-	TArray<UFogOfWarAgentComponent*> FogAgents;
+	TArray<UFogOfWarAgentComponent*> Agents;
 
+public:
+	TArray<FFogOfWarCell> FogOfWarCells;
+	
 private:
 	UPROPERTY()
 	UFogOfWarManager* FogOfWarManager;

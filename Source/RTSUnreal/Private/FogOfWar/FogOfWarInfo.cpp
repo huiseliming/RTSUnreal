@@ -42,7 +42,8 @@ void AFogOfWarInfo::DeregisterFromFogOfWarManager()
 
 void AFogOfWarInfo::Initialize()
 {
-	
+	const FIntVector FogOfWarResolution = FogOfWarManager->FogOfWarResolution;
+	FogOfWarCells.Init(FFogOfWarCell(), FogOfWarResolution.X * FogOfWarResolution.Y);
 }
 
 void AFogOfWarInfo::Cleanup()
@@ -52,15 +53,20 @@ void AFogOfWarInfo::Cleanup()
 
 void AFogOfWarInfo::Tick(float DeltaTime)
 {
-	
+	for (auto Agent : Agents)
+	{
+		
+	}
 }
 
 void AFogOfWarInfo::AddAgent(UFogOfWarAgentComponent* InAgent)
 {
-	
+	Agents.Add(InAgent);
+	OnAddAgent.Broadcast(InAgent);
 }
 
 void AFogOfWarInfo::RemoveAgent(UFogOfWarAgentComponent* InAgent)
 {
-		
+	Agents.RemoveSwap(InAgent);
+	OnRemoveAgent.Broadcast(InAgent);
 }

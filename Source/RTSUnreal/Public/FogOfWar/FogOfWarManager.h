@@ -57,6 +57,9 @@ private:
     uint8* FogOfWarUpscaleTextureBuffer;
     uint32 FogOfWarUpscaleTextureBufferSize;
     FUpdateTextureRegion2D FogOfWarUpscaleTextureUpdateRegion;
+public:
+	// fog of war resolution 
+	FIntVector FogOfWarResolution;
 	
 public:
 	friend class FRTSUnrealModule;

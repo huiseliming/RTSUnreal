@@ -26,7 +26,11 @@ public:
 	{
 		return FogOfWarTextureResolution;
 	}
-
+	FIntVector GetFogOfWarResolution() const
+	{
+		return FogOfWarResolution;
+	}
+	
 	//float GetFogOfWarResolution();
 	
 	// cell size in unreal unit(cm).
@@ -34,7 +38,7 @@ public:
 	float CellExtentSize = 25.f;
 
 	// fog of war texture resolution 
-	int32 FogOfWarTextureResolution = 256;
+	int32 FogOfWarTextureResolution;
 
 	// fog of war resolution 
 	FIntVector FogOfWarResolution;
