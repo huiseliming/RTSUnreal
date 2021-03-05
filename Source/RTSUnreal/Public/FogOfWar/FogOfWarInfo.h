@@ -9,7 +9,6 @@
 #include "FogOfWarInfo.generated.h"
 
 class UFogOfWarAgentComponent;
-class ARTSWorldBoundsVolume;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFogOfWarInfoAgentModifySignature, UFogOfWarAgentComponent* ,InAgent);
 
@@ -46,20 +45,5 @@ public:
 	// Registered FogOfWar agents
 	UPROPERTY(EditAnywhere, Category = "FogOfWarInfo")
 	TArray<UFogOfWarAgentComponent*> FogAgents;
-	UPROPERTY()
-	TArray<ARTSWorldBoundsVolume*> WorldBoundsVolumes;
-
-	// Original texture on CPU
-	UPROPERTY()
-	UTexture2D* FogOfWarTexture;
-	uint8* FogOfWarTextureBuffer;
-	uint32 FogOfWarTextureBufferSize;
-	FUpdateTextureRegion2D FogOfWarTextureUpdateRegion;
 	
-	// Upscaled texture on CPU
-	UPROPERTY()
-	UTexture2D* FogOfWarUpscaleTexture;
-	uint8* FogOfWarUpscaleTextureBuffer;
-	uint32 FogOfWarUpscaleTextureBufferSize;
-	FUpdateTextureRegion2D FogOfWarUpscaleTextureUpdateRegion;
 };

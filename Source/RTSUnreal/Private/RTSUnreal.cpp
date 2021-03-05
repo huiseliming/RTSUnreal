@@ -17,6 +17,7 @@ void FRTSUnrealModule::StartupModule()
 		FWorldDelegates::OnPostWorldCleanup.AddLambda(
 			[this](UWorld* World, bool bSessionEnded, bool bCleanupResources)
 			{
+				World->OnWorldBeginPlay.Remove(FogOfWarManagerMap.FindRef(World)->WorldBeginPlayHandle);
 			    FogOfWarManagerMap.Remove(World);
 			    UE_LOG(LogRTS, Log, TEXT("[%s] FogOfWarManager is removed for: %s"), *UE__FUNC__LINE__, *World->GetName());
 			}));
@@ -27,6 +28,7 @@ void FRTSUnrealModule::StartupModule()
 		{
 			// Passing an UWorld pointer as Outer in NewObject() and a flag RF_Standalone - is enough to keep your UObject alive during gameplay and auto destruction on game end.
 			UFogOfWarManager* FogOfWarManager = NewObject<UFogOfWarManager>(World, *(World->GetName() + TEXT("FogOfWarManager")), RF_Standalone);
+			FogOfWarManager->WorldBeginPlayHandle = World->OnWorldBeginPlay.AddUObject(FogOfWarManager, &UFogOfWarManager::OnWorldBeginPlay);
 	        FogOfWarManagerMap.Add(World, FogOfWarManager);
 	        UE_LOG(LogRTS, Log, TEXT("[%s] FogOfWarManager is created for: %s"), *UE__FUNC__LINE__, *World->GetName());
 		}));
@@ -37,7 +39,13 @@ void FRTSUnrealModule::StartupModule()
 void FRTSUnrealModule::ShutdownModule()
 {
 	for(auto& DelegateHandle: FogOfWarManagerDelegateHandles)
+	{
 		DelegateHandle.Reset();
+	}
+	for (auto Tuple : FogOfWarManagerMap)
+	{
+		Tuple.Key->OnWorldBeginPlay.Remove(Tuple.Value->WorldBeginPlayHandle);
+	}
 	FogOfWarManagerMap.Empty();
 	FogOfWarSettings->RemoveFromRoot();
 	UE_LOG(LogRTS, Log, TEXT("RTSUnrealModule Unload"));

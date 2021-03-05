@@ -9,6 +9,7 @@
 #include "FogOfWarManager.generated.h"
 
 class AFogOfWarInfo;
+class ARTSWorldBoundsVolume;
 
 /**
  * 
@@ -19,13 +20,43 @@ class RTSUNREAL_API UFogOfWarManager : public UObject
 	GENERATED_BODY()
 	
 public:
+	UFogOfWarManager();
+	~UFogOfWarManager();
 	// Get FogOfWarManager in current world
 	static UFogOfWarManager* Get(const UObject* WorldContextObject, EGetWorldErrorMode ErrorMode = EGetWorldErrorMode::Assert);
 
 	void RegisterFogOfWarInfo(AFogOfWarInfo* FogOfWarInfo);
 	void DeregisterFogOfWarInfo(AFogOfWarInfo* FogOfWarInfo);
-	
 	AFogOfWarInfo* GetFogOfWarInfo(int32 Index,FString Name) const;
 	
+private:
 	TArray<TWeakObjectPtr<AFogOfWarInfo>> FogOfWarInfos;
+	
+	TArray<TWeakObjectPtr<ARTSWorldBoundsVolume>> WorldBoundsVolumes;
+	
+public:
+	virtual void Initialize();
+	virtual void Cleanup();
+	
+private:
+    
+    	// Original texture on CPU
+    	UPROPERTY()
+    	UTexture2D* FogOfWarTexture;
+    	uint8* FogOfWarTextureBuffer;
+    	uint32 FogOfWarTextureBufferSize;
+    	FUpdateTextureRegion2D FogOfWarTextureUpdateRegion;
+    	
+    	// Upscaled texture on CPU
+    	UPROPERTY()
+    	UTexture2D* FogOfWarUpscaleTexture;
+    	uint8* FogOfWarUpscaleTextureBuffer;
+    	uint32 FogOfWarUpscaleTextureBufferSize;
+    	FUpdateTextureRegion2D FogOfWarUpscaleTextureUpdateRegion;
+	
+public:
+	friend class FRTSUnrealModule;
+	void OnWorldBeginPlay();
+private:
+	FDelegateHandle WorldBeginPlayHandle;
 };
