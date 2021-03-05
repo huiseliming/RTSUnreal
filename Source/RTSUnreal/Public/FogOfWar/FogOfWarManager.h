@@ -40,23 +40,23 @@ public:
 	virtual void Cleanup();
 	
 private:
+    // Original texture on CPU
+    UPROPERTY()
+    UTexture2D* FogOfWarTexture;
+    uint8* FogOfWarTextureBuffer;
+    uint32 FogOfWarTextureBufferSize;
+    FUpdateTextureRegion2D FogOfWarTextureUpdateRegion;
     
-    	// Original texture on CPU
-    	UPROPERTY()
-    	UTexture2D* FogOfWarTexture;
-    	uint8* FogOfWarTextureBuffer;
-    	uint32 FogOfWarTextureBufferSize;
-    	FUpdateTextureRegion2D FogOfWarTextureUpdateRegion;
-    	
-    	// Upscaled texture on CPU
-    	UPROPERTY()
-    	UTexture2D* FogOfWarUpscaleTexture;
-    	uint8* FogOfWarUpscaleTextureBuffer;
-    	uint32 FogOfWarUpscaleTextureBufferSize;
-    	FUpdateTextureRegion2D FogOfWarUpscaleTextureUpdateRegion;
+    // Upscaled texture on CPU
+    UPROPERTY()
+    UTexture2D* FogOfWarUpscaleTexture;
+    uint8* FogOfWarUpscaleTextureBuffer;
+    uint32 FogOfWarUpscaleTextureBufferSize;
+    FUpdateTextureRegion2D FogOfWarUpscaleTextureUpdateRegion;
 	
 public:
 	friend class FRTSUnrealModule;
+	// Called after all actors that iterate in the world execute BeginPlay
 	void OnWorldBeginPlay();
 private:
 	FDelegateHandle WorldBeginPlayHandle;
