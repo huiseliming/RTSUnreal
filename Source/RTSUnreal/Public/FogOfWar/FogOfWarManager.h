@@ -30,9 +30,10 @@ public:
 	AFogOfWarInfo* GetFogOfWarInfo(int32 Index,FString Name) const;
 	
 private:
-	TArray<TWeakObjectPtr<AFogOfWarInfo>> FogOfWarInfos;
-	
-	TArray<TWeakObjectPtr<ARTSWorldBoundsVolume>> WorldBoundsVolumes;
+	UPROPERTY()
+	TArray<AFogOfWarInfo*> FogOfWarInfos;
+	UPROPERTY()
+	TArray<ARTSWorldBoundsVolume*> WorldBoundsVolumes;
 	
 public:
 	virtual void Initialize();

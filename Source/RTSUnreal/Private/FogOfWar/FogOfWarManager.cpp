@@ -68,7 +68,7 @@ void UFogOfWarManager::Initialize()
 		UE_LOG(LogRTS, Error, TEXT("[%s] WorldBoundsVolumes.Num() = %d, Only supports one RTSWorldBoundsVolume"), *UE__FUNC__LINE__, WorldBoundsVolumes.Num());
 	}
 	
-	ARTSWorldBoundsVolume* RTSWorldBoundsVolume = WorldBoundsVolumes[0].Get();
+	ARTSWorldBoundsVolume* RTSWorldBoundsVolume = WorldBoundsVolumes[0];
 	const int32 FogOfWarTextureResolution = RTSWorldBoundsVolume->GetFogOfWarTextureResolution();
 	check(FMath::IsPowerOfTwo(FogOfWarTextureResolution));
 	const int32 CachedUpscaleTextureResolution = FogOfWarTextureResolution * 4;
@@ -119,5 +119,6 @@ void UFogOfWarManager::Cleanup()
 		delete[] FogOfWarUpscaleTextureBuffer;
 		FogOfWarUpscaleTextureBuffer = nullptr;
 	}
+	FogOfWarInfos.Empty();
 	WorldBoundsVolumes.Empty();
 }
