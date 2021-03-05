@@ -9,6 +9,7 @@
 
 UFogOfWarManager::UFogOfWarManager()
 {
+	bIsInitialize = false;
 	FogOfWarTexture = nullptr;
 	FogOfWarTextureBuffer = nullptr;
 	FogOfWarUpscaleTexture = nullptr;
@@ -37,6 +38,8 @@ void UFogOfWarManager::OnWorldBeginPlay()
 void UFogOfWarManager::RegisterFogOfWarInfo(AFogOfWarInfo* InFogOfWarInfo)
 {
 	FogOfWarInfos.AddUnique(InFogOfWarInfo);
+	if (bIsInitialize)
+		InFogOfWarInfo->Initialize();
 	UE_LOG(LogRTS, Log, TEXT("[%s] register to manager: %s"), *UE__FUNC__LINE__, *InFogOfWarInfo->GetName());
 }
 
@@ -97,6 +100,10 @@ void UFogOfWarManager::Initialize()
 	FogOfWarUpscaleTexture = UTexture2D::CreateTransient(CachedUpscaleTextureResolution,CachedUpscaleTextureResolution,EPixelFormat::PF_B8G8R8A8);
 	FogOfWarUpscaleTexture->MipGenSettings = TextureMipGenSettings::TMGS_NoMipmaps;
 	FogOfWarUpscaleTexture->UpdateResource();
+
+	for (auto FogOfWarInfo : FogOfWarInfos)
+		FogOfWarInfo->Initialize();
+	bIsInitialize = true;
 }
 
 void UFogOfWarManager::Cleanup()
@@ -121,4 +128,8 @@ void UFogOfWarManager::Cleanup()
 	}
 	FogOfWarInfos.Empty();
 	WorldBoundsVolumes.Empty();
+}
+
+void UFogOfWarManager::UpdateFogOfWarTexture()
+{
 }

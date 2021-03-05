@@ -9,6 +9,7 @@
 #include "FogOfWarInfo.generated.h"
 
 class UFogOfWarAgentComponent;
+class UFogOfWarManager;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFogOfWarInfoAgentModifySignature, UFogOfWarAgentComponent* ,InAgent);
 
@@ -26,9 +27,12 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void Destroyed() override;
 protected:
+	virtual void RegisterToFogOfWarManager();
+	virtual void DeregisterFromFogOfWarManager();
+public:
 	virtual void Initialize();
 	virtual void Cleanup();
-	
+
 public:
 	virtual void Tick(float DeltaTime) override;
 
@@ -39,11 +43,13 @@ public:
 	FFogOfWarInfoAgentModifySignature OnAddAgent;
 	FFogOfWarInfoAgentModifySignature OnRemoveAgent;
 	
-
 	TArray<IFogOfWarDissolveStrategy> DissolveStrategies;
 	
 	// Registered FogOfWar agents
 	UPROPERTY(EditAnywhere, Category = "FogOfWarInfo")
 	TArray<UFogOfWarAgentComponent*> FogAgents;
-	
+
+private:
+	UPROPERTY()
+	UFogOfWarManager* FogOfWarManager;
 };

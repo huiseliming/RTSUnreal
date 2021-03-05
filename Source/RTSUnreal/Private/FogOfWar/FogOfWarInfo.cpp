@@ -9,41 +9,45 @@
 AFogOfWarInfo::AFogOfWarInfo(const FObjectInitializer& ObjectInitializer)
 {
 	IFogOfWarDissolveStrategy::GetFogOfWarDissolveStrategies(DissolveStrategies);
-
 }
 
 void AFogOfWarInfo::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	Initialize();
+	FogOfWarManager = UFogOfWarManager::Get(this,EGetWorldErrorMode::LogAndReturnNull);
+	if(!FogOfWarManager)
+	{
+		UE_LOG(LogRTS, Fatal, TEXT("[%s] Can't get FogOfWarManager in current World"), *UE__FUNC__LINE__);
+	}
+	RegisterToFogOfWarManager();
 }
 
 void AFogOfWarInfo::Destroyed()
 {
-	Cleanup();
+	DeregisterFromFogOfWarManager();
 	Super::Destroyed();
+}
+
+void AFogOfWarInfo::RegisterToFogOfWarManager()
+{
+	FogOfWarManager->RegisterFogOfWarInfo(this);
+}
+
+void AFogOfWarInfo::DeregisterFromFogOfWarManager()
+{
+	FogOfWarManager->DeregisterFogOfWarInfo(this);
+	FogOfWarManager = nullptr;
+	Cleanup();
 }
 
 void AFogOfWarInfo::Initialize()
 {
-	Cleanup();
-	UFogOfWarManager* FogOfWarManager = UFogOfWarManager::Get(this,EGetWorldErrorMode::LogAndReturnNull);
-	if(!FogOfWarManager)
-	{
-		UE_LOG(LogRTS, Error, TEXT("[%s] Can't get FogOfWarManager in current World"), *UE__FUNC__LINE__);
-	}
-	FogOfWarManager->RegisterFogOfWarInfo(this);
 	
 }
 
 void AFogOfWarInfo::Cleanup()
 {
-	UFogOfWarManager* FogOfWarManager = UFogOfWarManager::Get(this,EGetWorldErrorMode::LogAndReturnNull);
-	if(!FogOfWarManager)
-	{
-		UE_LOG(LogRTS, Error, TEXT("[%s] Can't get FogOfWarManager in current World"), *UE__FUNC__LINE__);
-	}
-	FogOfWarManager->DeregisterFogOfWarInfo(this);
+	
 }
 
 void AFogOfWarInfo::Tick(float DeltaTime)

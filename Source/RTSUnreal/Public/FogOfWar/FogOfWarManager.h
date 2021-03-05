@@ -27,7 +27,8 @@ public:
 
 	void RegisterFogOfWarInfo(AFogOfWarInfo* FogOfWarInfo);
 	void DeregisterFogOfWarInfo(AFogOfWarInfo* FogOfWarInfo);
-	AFogOfWarInfo* GetFogOfWarInfo(int32 Index,FString Name) const;
+	
+	//AFogOfWarInfo* GetFogOfWarInfo(int32 Index,FString Name) const;
 	
 private:
 	UPROPERTY()
@@ -35,10 +36,13 @@ private:
 	UPROPERTY()
 	TArray<ARTSWorldBoundsVolume*> WorldBoundsVolumes;
 	
-public:
+private:
 	virtual void Initialize();
 	virtual void Cleanup();
 	
+	virtual void UpdateFogOfWarTexture();
+
+	bool bIsInitialize;
 private:
     // Original texture on CPU
     UPROPERTY()
