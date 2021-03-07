@@ -27,14 +27,17 @@ public:
 
 	void RegisterFogOfWarInfo(AFogOfWarInfo* FogOfWarInfo);
 	void DeregisterFogOfWarInfo(AFogOfWarInfo* FogOfWarInfo);
-	
+
 	//AFogOfWarInfo* GetFogOfWarInfo(int32 Index,FString Name) const;
+
+	// WorldBoundsVolume Initialize after BeginPlay()
+	ARTSWorldBoundsVolume* GetWorldBoundsVolume() const ;
 	
 private:
 	UPROPERTY()
 	TArray<AFogOfWarInfo*> FogOfWarInfos;
 	UPROPERTY()
-	TArray<ARTSWorldBoundsVolume*> WorldBoundsVolumes;
+	ARTSWorldBoundsVolume* WorldBoundsVolume;
 	
 private:
 	virtual void Initialize();

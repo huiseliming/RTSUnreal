@@ -21,6 +21,8 @@ public:
 	void InitializeWorldBoundsInfo();
 
 
+	FVector GetFogOfWarCoordinateOrigin() const;
+
 	//float GetCellExtentSize();
 	int32 GetFogOfWarTextureResolution() const
 	{
@@ -37,6 +39,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="RTS")
 	float CellExtentSize = 25.f;
 
+
+	FVector FogOfWarCoordinateOrigin;
+	
 	// fog of war texture resolution 
 	int32 FogOfWarTextureResolution;
 

@@ -39,7 +39,7 @@ void ARTSWorldBoundsVolume::InitializeWorldBoundsInfo()
 	const FBoxSphereBounds RTSWorldBounds = RTSWorldBoundsBrushComponent->CalcBounds(RTSWorldBoundsBrushComponent->GetComponentTransform());
 
 	// Calculate GridRowNumber and WorldGridSize
-	int32 MaxOfFogOfWarResolution = FMath::CeilToInt(FMath::Max(RTSWorldBounds.BoxExtent.X,RTSWorldBounds.BoxExtent.Y) / (CellExtentSize * 2)) * 2;
+	const int32 MaxOfFogOfWarResolution = FMath::CeilToInt(FMath::Max(RTSWorldBounds.BoxExtent.X,RTSWorldBounds.BoxExtent.Y) / (CellExtentSize * 2)) * 2;
 	FogOfWarTextureResolution = FMath::RoundUpToPowerOfTwo(MaxOfFogOfWarResolution);
 	if(FogOfWarTextureResolution > 1024 * 4)
 	{
@@ -49,6 +49,11 @@ void ARTSWorldBoundsVolume::InitializeWorldBoundsInfo()
 	{
 		UE_LOG(LogRTS, Warning, TEXT("[%s] FogOfWarResolution is %d greater than 4096"), *UE__FUNC__LINE__, FogOfWarTextureResolution);
 	}
+	const FVector WorldBoundsLocation = RTSWorldBoundsBrushComponent->GetComponentLocation();
+	FogOfWarCoordinateOrigin = FVector(
+		WorldBoundsLocation.X - FogOfWarTextureResolution * CellExtentSize,
+		WorldBoundsLocation.Y - FogOfWarTextureResolution * CellExtentSize,
+		WorldBoundsLocation.Z);
 	
 	FogOfWarResolution.X = FMath::CeilToInt(RTSWorldBounds.BoxExtent.X / (CellExtentSize * 2)) * 2;
 	FogOfWarResolution.Y = FMath::CeilToInt(RTSWorldBounds.BoxExtent.Y / (CellExtentSize * 2)) * 2;
@@ -56,4 +61,9 @@ void ARTSWorldBoundsVolume::InitializeWorldBoundsInfo()
 	
 	UE_LOG(LogRTS, Log, TEXT("[%s] FogOfWarResolution(%s), FogOfWarTextureResolution(%d) "), *UE__FUNC__LINE__, *FogOfWarResolution.ToString(),FogOfWarTextureResolution);
 	
+}
+
+FVector ARTSWorldBoundsVolume::GetFogOfWarCoordinateOrigin() const 
+{
+	return FogOfWarCoordinateOrigin;
 }

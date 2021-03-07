@@ -54,26 +54,24 @@ void UFogOfWarManager::DeregisterFogOfWarInfo(AFogOfWarInfo* InFogOfWarInfo)
 	UE_LOG(LogRTS, Log, TEXT("[%s] deregister from Manager %s"), *UE__FUNC__LINE__, *InFogOfWarInfo->GetName());
 }
 
+ARTSWorldBoundsVolume* UFogOfWarManager::GetWorldBoundsVolume() const 
+{
+	return WorldBoundsVolume;
+}
+
 
 void UFogOfWarManager::Initialize()
 {
-	WorldBoundsVolumes.Empty();
+	WorldBoundsVolume = nullptr;
 	// Find current RTSWorldBounds  
 	for (TActorIterator<ARTSWorldBoundsVolume> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
-		ARTSWorldBoundsVolume* RTSWorldBoundsVolume = *ActorItr;
-		WorldBoundsVolumes.Add(RTSWorldBoundsVolume);
+		check(WorldBoundsVolume == nullptr && "Discover the second RTSWorldBoundsVolume");
+		WorldBoundsVolume = *ActorItr;
 	}
 	
-	// Currently only supports one RTSWorldBoundsVolume
-	if(WorldBoundsVolumes.Num() != 1)
-	{
-		UE_LOG(LogRTS, Error, TEXT("[%s] WorldBoundsVolumes.Num() = %d, Only supports one RTSWorldBoundsVolume"), *UE__FUNC__LINE__, WorldBoundsVolumes.Num());
-	}
-	
-	ARTSWorldBoundsVolume* RTSWorldBoundsVolume = WorldBoundsVolumes[0];
-	const int32 FogOfWarTextureResolution = RTSWorldBoundsVolume->GetFogOfWarTextureResolution();
-	FogOfWarResolution = RTSWorldBoundsVolume->GetFogOfWarResolution();
+	const int32 FogOfWarTextureResolution = WorldBoundsVolume->GetFogOfWarTextureResolution();
+	FogOfWarResolution = WorldBoundsVolume->GetFogOfWarResolution();
 	check(FMath::IsPowerOfTwo(FogOfWarTextureResolution));
 	const int32 CachedUpscaleTextureResolution = FogOfWarTextureResolution * 4;
 	
@@ -128,7 +126,7 @@ void UFogOfWarManager::Cleanup()
 		FogOfWarUpscaleTextureBuffer = nullptr;
 	}
 	FogOfWarInfos.Empty();
-	WorldBoundsVolumes.Empty();
+	WorldBoundsVolume = nullptr;
 }
 
 void UFogOfWarManager::UpdateFogOfWarTexture()

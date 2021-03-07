@@ -48,6 +48,15 @@ public:
 	virtual void Initialize();
 	virtual void Cleanup();
 
+	FIntVector WorldLocationToCellXY(FVector InWorldLocation) const;
+	FVector CellXYToCellCenterWorldLocation(FIntVector CellXY) const;
+	
+	int32 CellXYToCellIndex(FIntVector InCellXY) const;
+	FIntVector CellIndexToCellXY(int32 InCellIndex) const;
+
+	int32 WorldLocationToCellIndex(FVector InWorldLocation) const;
+	FVector CellIndexToCellCenterWorldLocation(int32 InCellIndex) const;
+	
 public:
 	virtual void Tick(float DeltaTime) override;
 
